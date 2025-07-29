@@ -169,9 +169,6 @@ const GameScreen: React.FC = () => {
                                 className="flex-1 text-md font-bold py-3 px-4 rounded-lg bg-teal-500 hover:bg-teal-600 text-white transition-all disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
                                 {t('useCard')} ({currentPlayer.cards.length})
                             </button>
-                            <button disabled className="flex-1 text-md font-bold py-3 px-4 rounded-lg bg-gray-200 text-gray-500 cursor-not-allowed opacity-50">
-                                {t('drawCard')}
-                            </button>
                         </footer>
                     )}
                 </div>
