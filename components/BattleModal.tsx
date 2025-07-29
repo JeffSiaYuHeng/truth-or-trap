@@ -78,7 +78,7 @@ const BattleModal: React.FC = () => {
             <h2 className="text-3xl font-bold mb-8 animate-pulse">{t('chooseYourWeapon', { name: activePlayer.name })}</h2>
             <div className="grid grid-cols-3 gap-4 md:gap-8">
                 {RPS_OPTIONS.map(opt => (
-                     <button key={opt.value} onClick={() => handleChoice(opt.value)} className="aspect-square flex flex-col items-center justify-center bg-gray-100 rounded-2xl transform transition-transform hover:scale-110 hover:bg-gray-200 focus:outline-none">
+                     <button key={opt.value} onClick={() => handleChoice(opt.value)} className="aspect-square flex flex-col items-center justify-center bg-gray-100 rounded-2xl transform transition-transform focus:outline-none">
                         <span className="text-6xl md:text-8xl">{opt.emoji}</span>
                         <span className="font-bold mt-2 text-xl">{t(opt.labelKey)}</span>
                     </button>
