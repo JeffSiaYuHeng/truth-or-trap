@@ -39,7 +39,7 @@ const CardAwardPopup: React.FC = () => {
                         {t('chanceCardAwarded', { playerName, cardName: cardLocalization.name })}
                     </p>
                     <div className="bg-yellow-50 p-4 rounded-lg flex flex-col items-center justify-center gap-2 border border-yellow-200">
-                        <img src={cardDetails.image} alt={cardLocalization.name} className="w-20 h-20 mb-2" />
+<img src={cardDetails.image} alt={cardLocalization.name} className="w-24 h-32 mb-2" />
                         <h3 className="font-bold text-yellow-800 text-xl">{cardLocalization.name}</h3>
                         <p className="text-yellow-700 text-sm">{cardLocalization.description}</p>
                     </div>
