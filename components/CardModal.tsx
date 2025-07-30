@@ -67,7 +67,6 @@ const CardModal: React.FC = () => {
 
       // These cards are used to INITIATE an action for a turn.
       // They cannot be used if a challenge is already active.
-      case Card.INTENSIFY:
       case Card.KING:
       case Card.STEAL:
       case Card.BATTLE:

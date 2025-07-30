@@ -6,11 +6,6 @@ export enum Language {
   MY = 'my',
 }
 
-export enum GameMode {
-  PRIVATE = 'private',
-  PUBLIC = 'public',
-}
-
 export enum Difficulty {
   SIMPLE = 'simple',
   NORMAL = 'normal',
@@ -29,7 +24,6 @@ export enum ChallengeType {
 
 export enum Card {
   IMMUNITY = 'IMMUNITY',       // 免除卡
-  INTENSIFY = 'INTENSIFY',   // 加强卡
   REVERSE = 'REVERSE',       // 反转卡
   BATTLE = 'BATTLE',         // 对战卡
   STEAL = 'STEAL',           // 偷取卡
@@ -63,7 +57,6 @@ export interface BattleState {
 
 export interface GameState {
   players: Player[];
-  gameMode: GameMode;
   difficulty: Difficulty;
   currentScreen: GameScreen;
   currentPlayerIndex: number | null;
@@ -77,7 +70,6 @@ export interface GameState {
   isForcedDare: boolean;
   isPickingPlayer: boolean;
   isCardModalOpen: boolean;
-  isNextChallengeIntensified: boolean;
   gameMessage: GameMessage | null;
   isStealFailure: boolean;
   battle: BattleState | null;
@@ -90,7 +82,6 @@ export type GameAction =
   | { type: 'UPDATE_PLAYER_NAME'; payload: { id: string, name: string } }
   | { type: 'UPDATE_PLAYER_AVATAR'; payload: { id: string, avatar: string } }
   | { type: 'SET_LANGUAGE'; payload: Language }
-  | { type: 'SET_GAME_MODE'; payload: GameMode }
   | { type: 'SET_DIFFICULTY'; payload: Difficulty }
   | { type: 'START_GAME' }
   | { type: 'START_PLAYER_PICKING' }

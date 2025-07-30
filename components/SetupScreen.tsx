@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../App";
 import { useLocalization } from "../context/LocalizationContext";
-import { Player, GameMode, Language, Difficulty } from "../types";
+import { Player, Language, Difficulty } from "../types";
 import { AVATARS } from "../constants";
 
 const LanguageSelector: React.FC = () => {
@@ -115,44 +115,6 @@ const SetupScreen: React.FC = () => {
               className="hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
             >
               {t("addPlayer")}
-            </button>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">
-            {t("gameMode")}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              onClick={() =>
-                dispatch({ type: "SET_GAME_MODE", payload: GameMode.PRIVATE })
-              }
-              className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                state.gameMode === GameMode.PRIVATE
-                  ? "bg-white ring-2 ring-[#FAB655]"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              <h3 className="font-bold text-lg text-gray-800">
-                {t("privateMode")}
-              </h3>
-              <p className="text-sm text-gray-500">{t("privateModeDesc")}</p>
-            </button>
-            <button
-              onClick={() =>
-                dispatch({ type: "SET_GAME_MODE", payload: GameMode.PUBLIC })
-              }
-              className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                state.gameMode === GameMode.PUBLIC
-                  ? "bg-white ring-2 ring-[#FAB655]"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              <h3 className="font-bold text-lg text-gray-800">
-                {t("publicMode")}
-              </h3>
-              <p className="text-sm text-gray-500">{t("publicModeDesc")}</p>
             </button>
           </div>
         </section>

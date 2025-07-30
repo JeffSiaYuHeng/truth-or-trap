@@ -17,12 +17,6 @@ export const CARD_DETAILS: Record<Card, {
     [Language.CN]: { name: '免除卡', description: '跳过你的回合一次。' },
     [Language.MY]: { name: 'Kad Imuniti', description: 'Langkau giliran anda sekali.' },
   },
-  [Card.INTENSIFY]: {
-    image: '/images/cards/INTENSIFY_CARD.jpg',
-    [Language.EN]: { name: 'Intensify Card', description: "Skip your turn and make the next player's challenge harder." },
-    [Language.CN]: { name: '加强卡', description: '跳过你的回合，并让下一位玩家的挑战变得更难。' },
-    [Language.MY]: { name: 'Kad Intensiti', description: 'Langkau giliran anda dan jadikan cabaran pemain seterusnya lebih sukar.' },
-  },
   [Card.REVERSE]: {
     image: '/images/cards/REVERSE_CARD.jpg',
     [Language.EN]: { name: 'Reverse Card', description: 'Push your challenge to the previous player.' },

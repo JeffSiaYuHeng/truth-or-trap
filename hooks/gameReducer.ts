@@ -1,8 +1,7 @@
-import { GameState, GameScreen, Player, GameMode, Language, GameAction, ChallengeType, Card, Difficulty } from '../types';
+import { GameState, GameScreen, Player, Language, GameAction, ChallengeType, Card, Difficulty } from '../types';
 
 export const initialState: GameState = {
   players: [],
-  gameMode: GameMode.PRIVATE,
   difficulty: Difficulty.NORMAL,
   currentScreen: GameScreen.SETUP,
   currentPlayerIndex: null,
@@ -16,7 +15,6 @@ export const initialState: GameState = {
   isForcedDare: false,
   isPickingPlayer: false,
   isCardModalOpen: false,
-  isNextChallengeIntensified: false,
   gameMessage: null,
   isStealFailure: false,
   battle: null,
@@ -36,24 +34,19 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         players: state.players.filter(p => p.id !== action.payload),
       };
     case 'UPDATE_PLAYER_NAME':
-        return {
-            ...state,
-            players: state.players.map(p => p.id === action.payload.id ? {...p, name: action.payload.name} : p)
-        }
+      return {
+        ...state,
+        players: state.players.map(p => p.id === action.payload.id ? { ...p, name: action.payload.name } : p)
+      }
     case 'UPDATE_PLAYER_AVATAR':
-        return {
-            ...state,
-            players: state.players.map(p => p.id === action.payload.id ? {...p, avatar: action.payload.avatar} : p)
-        }
+      return {
+        ...state,
+        players: state.players.map(p => p.id === action.payload.id ? { ...p, avatar: action.payload.avatar } : p)
+      }
     case 'SET_LANGUAGE':
       return {
         ...state,
         language: action.payload,
-      };
-    case 'SET_GAME_MODE':
-      return {
-        ...state,
-        gameMode: action.payload,
       };
     case 'SET_DIFFICULTY':
       return {
@@ -70,64 +63,63 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         currentChallenge: { type: null, text: '' },
       };
     case 'START_PLAYER_PICKING': {
-        const lastPlayerIndex = state.currentPlayerIndex;
+      const lastPlayerIndex = state.currentPlayerIndex;
 
-        // Chance Event: 35% chance to get a card after completing a challenge.
-        if (lastPlayerIndex !== null && state.currentChallenge.text && Math.random() < 0.35) {
-            let updatedPlayers = [...state.players];
-            const droppableCards: Card[] = [
-                Card.INTENSIFY, Card.INTENSIFY, Card.INTENSIFY, // Common
-                Card.REVERSE,                               // Common
-                Card.BATTLE, Card.BATTLE,                   // Uncommon
-                Card.STEAL,                                 // Uncommon
-                Card.IMMUNITY,                              // Rare
-                Card.KING,                                  // Rarest
-            ];
-            const randomCard = droppableCards[Math.floor(Math.random() * droppableCards.length)];
-            
-            const playerToReward = updatedPlayers[lastPlayerIndex];
-            const updatedPlayer = {
-                ...playerToReward,
-                cards: [...playerToReward.cards, randomCard]
-            };
-            updatedPlayers[lastPlayerIndex] = updatedPlayer;
+      // Chance Event: 35% chance to get a card after completing a challenge.
+      if (lastPlayerIndex !== null && state.currentChallenge.text && Math.random() < 0.35) {
+        let updatedPlayers = [...state.players];
+        const droppableCards: Card[] = [
+          Card.REVERSE, Card.REVERSE, Card.REVERSE,       // Common
+          Card.BATTLE, Card.BATTLE, Card.BATTLE,          // Uncommon
+          Card.STEAL, Card.STEAL,                         // Uncommon
+          Card.IMMUNITY,                                  // Rare
+          Card.KING,                                      // Rarest
+        ];
+        const randomCard = droppableCards[Math.floor(Math.random() * droppableCards.length)];
 
-            const lastCardAwarded = {
-                playerName: playerToReward.name,
-                card: randomCard,
-            };
-            
-            // If a card was awarded, show the popup first. Don't start picking.
-            return {
-                ...state,
-                players: updatedPlayers,
-                currentChallenge: { type: null, text: ''},
-                gameMessage: null,
-                lastCardAwarded,
-                isPickingPlayer: false, // Explicitly set to false
-            };
-        }
-
-        // If no card was awarded, proceed directly to picking.
-        return {
-            ...state,
-            isPickingPlayer: true,
-            currentChallenge: { type: null, text: ''},
-            gameMessage: null,
+        const playerToReward = updatedPlayers[lastPlayerIndex];
+        const updatedPlayer = {
+          ...playerToReward,
+          cards: [...playerToReward.cards, randomCard]
         };
+        updatedPlayers[lastPlayerIndex] = updatedPlayer;
+
+        const lastCardAwarded = {
+          playerName: playerToReward.name,
+          card: randomCard,
+        };
+
+        // If a card was awarded, show the popup first. Don't start picking.
+        return {
+          ...state,
+          players: updatedPlayers,
+          currentChallenge: { type: null, text: '' },
+          gameMessage: null,
+          lastCardAwarded,
+          isPickingPlayer: false, // Explicitly set to false
+        };
+      }
+
+      // If no card was awarded, proceed directly to picking.
+      return {
+        ...state,
+        isPickingPlayer: true,
+        currentChallenge: { type: null, text: '' },
+        gameMessage: null,
+      };
     }
     case 'NEXT_PLAYER':
       if (state.players.length === 0) return state;
       const newPlayerIndex = Math.floor(Math.random() * state.players.length);
       const isForced = newPlayerIndex === state.currentPlayerIndex;
       const players = state.players.map((p, index) => {
-          if (index === newPlayerIndex) {
-              return {...p, consecutiveTurns: isForced ? p.consecutiveTurns + 1 : 1};
-          }
-          if(index === state.currentPlayerIndex) {
-              return {...p, consecutiveTurns: 0};
-          }
-          return p;
+        if (index === newPlayerIndex) {
+          return { ...p, consecutiveTurns: isForced ? p.consecutiveTurns + 1 : 1 };
+        }
+        if (index === state.currentPlayerIndex) {
+          return { ...p, consecutiveTurns: 0 };
+        }
+        return p;
       });
       return {
         ...state,
@@ -149,7 +141,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (state.currentPlayerIndex === null) {
         return state;
       }
-      
+
       const currentPlayerId = state.players[state.currentPlayerIndex].id;
       let gameMessage: GameState['gameMessage'] = state.gameMessage;
 
@@ -184,14 +176,13 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
             dareStreak: 0,
           };
         }
-        
+
         return updatedPlayer;
       });
-      
+
       return {
         ...state,
         isLoading: false,
-        isNextChallengeIntensified: false,
         isStealFailure: false,
         currentChallenge: { ...action.payload },
         players: updatedPlayers,
@@ -199,90 +190,78 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
     case 'CHALLENGE_FAIL':
-        return {
-            ...state,
-            isLoading: false,
-            currentChallenge: { ...state.currentChallenge, text: 'geminiError' }
-        }
+      return {
+        ...state,
+        isLoading: false,
+        currentChallenge: { ...state.currentChallenge, text: 'geminiError' }
+      }
     case 'OPEN_CARD_MODAL':
-        return { ...state, isCardModalOpen: true };
+      return { ...state, isCardModalOpen: true };
     case 'CLOSE_CARD_MODAL':
-        return { ...state, isCardModalOpen: false, battle: null };
+      return { ...state, isCardModalOpen: false, battle: null };
     case 'USE_CARD': {
-        if (state.currentPlayerIndex === null) return state;
-        
-        const playerIndex = state.currentPlayerIndex;
-        const player = state.players[playerIndex];
-        const cardToUse = action.payload.card;
+      if (state.currentPlayerIndex === null) return state;
 
-        const cardIndex = player.cards.indexOf(cardToUse);
-        if (cardIndex === -1) return state;
+      const playerIndex = state.currentPlayerIndex;
+      const player = state.players[playerIndex];
+      const cardToUse = action.payload.card;
 
-        const updatedCards = [...player.cards];
-        updatedCards.splice(cardIndex, 1);
-        
-        const updatedPlayers = [...state.players];
-        let updatedPlayer = { ...player, cards: updatedCards };
-        
-        let nextState = { ...state, isCardModalOpen: false };
+      const cardIndex = player.cards.indexOf(cardToUse);
+      if (cardIndex === -1) return state;
 
-        switch (cardToUse) {
-            case Card.REVERSE: {
-                if (state.previousPlayerIndex === null || !state.currentChallenge.text) {
-                    // This case should be prevented by UI, but as a safeguard:
-                    return state; 
-                }
+      const updatedCards = [...player.cards];
+      updatedCards.splice(cardIndex, 1);
 
-                const reversedPlayerIndex = state.previousPlayerIndex;
-                const reversedPlayer = state.players[reversedPlayerIndex];
-                
-                updatedPlayers[playerIndex] = updatedPlayer; // player with card removed
+      const updatedPlayers = [...state.players];
+      let updatedPlayer = { ...player, cards: updatedCards };
 
-                return {
-                    ...nextState,
-                    players: updatedPlayers,
-                    // The challenge remains the same, but the player changes.
-                    currentPlayerIndex: reversedPlayerIndex,
-                    // The 'previous' player is now the one who reversed the card.
-                    // This allows for a reverse-back, which could be fun.
-                    previousPlayerIndex: playerIndex,
-                    isForcedDare: false, // Reversing shouldn't force a dare on the unsuspecting recipient
-                    gameMessage: { 
-                        key: 'reverseUsed', 
-                        options: { userName: player.name, previousPlayerName: reversedPlayer.name } 
-                    },
-                };
-            }
-            case Card.IMMUNITY: {
-                updatedPlayers[playerIndex] = updatedPlayer;
-                return {
-                    ...nextState,
-                    players: updatedPlayers,
-                    isPickingPlayer: true,
-                    currentPlayerIndex: null, // Picker animation will select next player
-                    currentChallenge: { type: null, text: '' },
-                    gameMessage: { key: 'immunityUsed' },
-                };
-            }
-            case Card.INTENSIFY: {
-                updatedPlayers[playerIndex] = updatedPlayer;
-                return {
-                    ...nextState,
-                    players: updatedPlayers,
-                    isNextChallengeIntensified: true,
-                    isPickingPlayer: true,
-                    currentPlayerIndex: null, // Picker animation will select next player
-                    currentChallenge: { type: null, text: '' },
-                    gameMessage: { key: 'intensifyUsed' },
-                };
-            }
-            default:
-                // For cards that open another modal (King, Battle, Steal), we don't change players yet.
-                // The state change will be handled by their respective modals.
-                // We just need to ensure the card is removed.
-                updatedPlayers[playerIndex] = updatedPlayer;
-                return { ...nextState, players: updatedPlayers };
+      let nextState = { ...state, isCardModalOpen: false };
+
+      switch (cardToUse) {
+        case Card.REVERSE: {
+          if (state.previousPlayerIndex === null || !state.currentChallenge.text) {
+            // This case should be prevented by UI, but as a safeguard:
+            return state;
+          }
+
+          const reversedPlayerIndex = state.previousPlayerIndex;
+          const reversedPlayer = state.players[reversedPlayerIndex];
+
+          updatedPlayers[playerIndex] = updatedPlayer; // player with card removed
+
+          return {
+            ...nextState,
+            players: updatedPlayers,
+            // The challenge remains the same, but the player changes.
+            currentPlayerIndex: reversedPlayerIndex,
+            // The 'previous' player is now the one who reversed the card.
+            // This allows for a reverse-back, which could be fun.
+            previousPlayerIndex: playerIndex,
+            isForcedDare: false, // Reversing shouldn't force a dare on the unsuspecting recipient
+            gameMessage: {
+              key: 'reverseUsed',
+              options: { userName: player.name, previousPlayerName: reversedPlayer.name }
+            },
+          };
         }
+        case Card.IMMUNITY: {
+          updatedPlayers[playerIndex] = updatedPlayer;
+          return {
+            ...nextState,
+            players: updatedPlayers,
+            isPickingPlayer: true,
+            currentPlayerIndex: null, // Picker animation will select next player
+            currentChallenge: { type: null, text: '' },
+            gameMessage: { key: 'immunityUsed' },
+          };
+        }
+        default:
+          // For cards that open another modal (King, Battle, Steal), we don't change players yet.
+          // The state change will be handled by their respective modals.
+          // We just need to ensure the card is removed.
+          updatedPlayers[playerIndex] = updatedPlayer;
+          return { ...nextState, players: updatedPlayers };
+      }
     }
     case 'SET_CUSTOM_CHALLENGE': {
       if (state.currentPlayerIndex === null) return state;
@@ -292,133 +271,132 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       const targetPlayerIndex = state.players.findIndex(p => p.id === action.payload.targetPlayerId);
 
       if (targetPlayerIndex === -1) return state;
-      
+
       const targetPlayer = state.players[targetPlayerIndex];
 
       const kingCardIndex = kingPlayer.cards.indexOf(Card.KING);
-      if (kingCardIndex === -1) return state; 
-      
+      if (kingCardIndex === -1) return state;
+
       const updatedKingCards = [...kingPlayer.cards];
       updatedKingCards.splice(kingCardIndex, 1);
-      
+
       const updatedPlayers = [...state.players];
       updatedPlayers[kingPlayerIndex] = { ...kingPlayer, cards: updatedKingCards };
 
       return {
-          ...state,
-          players: updatedPlayers,
-          currentPlayerIndex: targetPlayerIndex,
-          currentChallenge: {
-              type: action.payload.challengeType,
-              text: action.payload.challengeText,
-          },
-          gameMessage: { key: 'kingUsed', options: { kingName: kingPlayer.name, targetName: targetPlayer.name } },
-          isCardModalOpen: false,
-          isPickingPlayer: false,
-          isForcedDare: false,
-          isLoading: false,
+        ...state,
+        players: updatedPlayers,
+        currentPlayerIndex: targetPlayerIndex,
+        currentChallenge: {
+          type: action.payload.challengeType,
+          text: action.payload.challengeText,
+        },
+        gameMessage: { key: 'kingUsed', options: { kingName: kingPlayer.name, targetName: targetPlayer.name } },
+        isCardModalOpen: false,
+        isPickingPlayer: false,
+        isForcedDare: false,
+        isLoading: false,
       }
     }
     case 'START_BATTLE': {
-        if (state.currentPlayerIndex === null) return state;
-        const challenger = state.players[state.currentPlayerIndex];
-        const opponent = state.players.find(p => p.id === action.payload.opponentId);
-        if (!opponent) return state;
+      if (state.currentPlayerIndex === null) return state;
+      const challenger = state.players[state.currentPlayerIndex];
+      const opponent = state.players.find(p => p.id === action.payload.opponentId);
+      if (!opponent) return state;
 
-        const challengerCardIndex = challenger.cards.indexOf(Card.BATTLE);
-        if (challengerCardIndex === -1) return state;
+      const challengerCardIndex = challenger.cards.indexOf(Card.BATTLE);
+      if (challengerCardIndex === -1) return state;
 
-        const updatedPlayers = [...state.players];
-        const updatedChallenger = {...challenger, cards: [...challenger.cards]};
-        updatedChallenger.cards.splice(challengerCardIndex, 1);
-        updatedPlayers[state.currentPlayerIndex] = updatedChallenger;
+      const updatedPlayers = [...state.players];
+      const updatedChallenger = { ...challenger, cards: [...challenger.cards] };
+      updatedChallenger.cards.splice(challengerCardIndex, 1);
+      updatedPlayers[state.currentPlayerIndex] = updatedChallenger;
 
-        return {
-            ...state,
-            players: updatedPlayers,
-            battle: { challenger, opponent },
-            isCardModalOpen: false,
-        };
+      return {
+        ...state,
+        players: updatedPlayers,
+        battle: { challenger, opponent },
+        isCardModalOpen: false,
+      };
     }
     case 'END_BATTLE': {
-        const loserIndex = state.players.findIndex(p => p.id === action.payload.loserId);
-        if (loserIndex === -1) return state;
+      const loserIndex = state.players.findIndex(p => p.id === action.payload.loserId);
+      if (loserIndex === -1) return state;
 
-        return {
-            ...state,
-            battle: null,
-            currentPlayerIndex: loserIndex,
-            currentChallenge: { type: null, text: ''},
-            isNextChallengeIntensified: true,
-            isForcedDare: true, // Force a dare for the loser
-            gameMessage: { key: 'battleLoser', options: { name: state.players[loserIndex].name } },
-        }
+      return {
+        ...state,
+        battle: null,
+        currentPlayerIndex: loserIndex,
+        currentChallenge: { type: null, text: '' },
+        isForcedDare: true, // Force a dare for the loser
+        gameMessage: { key: 'battleLoser', options: { name: state.players[loserIndex].name } },
+      }
     }
     case 'ATTEMPT_STEAL': {
-        if (state.currentPlayerIndex === null) return state;
-        const stealerIndex = state.currentPlayerIndex;
-        const stealer = state.players[stealerIndex];
-        const targetIndex = state.players.findIndex(p => p.id === action.payload.targetId);
-        if (targetIndex === -1) return state;
+      if (state.currentPlayerIndex === null) return state;
+      const stealerIndex = state.currentPlayerIndex;
+      const stealer = state.players[stealerIndex];
+      const targetIndex = state.players.findIndex(p => p.id === action.payload.targetId);
+      if (targetIndex === -1) return state;
 
-        const target = state.players[targetIndex];
-        
-        const stealerCardIndex = stealer.cards.indexOf(Card.STEAL);
-        if (stealerCardIndex === -1) return state; // Should not happen
-        
-        const updatedPlayers = [...state.players];
+      const target = state.players[targetIndex];
 
-        const updatedStealer = {...stealer, cards: [...stealer.cards]};
-        updatedStealer.cards.splice(stealerCardIndex, 1);
-        
-        const success = Math.random() < 0.75;
-        let gameMessage: GameState['gameMessage'];
+      const stealerCardIndex = stealer.cards.indexOf(Card.STEAL);
+      if (stealerCardIndex === -1) return state; // Should not happen
 
-        if (success) {
-            const immunityCardIndex = target.cards.indexOf(Card.IMMUNITY);
-            if (immunityCardIndex !== -1) {
-                const updatedTarget = {...target, cards: [...target.cards]};
-                updatedTarget.cards.splice(immunityCardIndex, 1);
-                updatedStealer.cards.push(Card.IMMUNITY);
-                updatedPlayers[targetIndex] = updatedTarget;
-                gameMessage = { key: 'stealSuccess', options: { name: target.name } };
-            } else {
-                gameMessage = { key: 'noOneToStealFrom' }; 
-            }
+      const updatedPlayers = [...state.players];
+
+      const updatedStealer = { ...stealer, cards: [...stealer.cards] };
+      updatedStealer.cards.splice(stealerCardIndex, 1);
+
+      const success = Math.random() < 0.75;
+      let gameMessage: GameState['gameMessage'];
+
+      if (success) {
+        const immunityCardIndex = target.cards.indexOf(Card.IMMUNITY);
+        if (immunityCardIndex !== -1) {
+          const updatedTarget = { ...target, cards: [...target.cards] };
+          updatedTarget.cards.splice(immunityCardIndex, 1);
+          updatedStealer.cards.push(Card.IMMUNITY);
+          updatedPlayers[targetIndex] = updatedTarget;
+          gameMessage = { key: 'stealSuccess', options: { name: target.name } };
         } else {
-            gameMessage = { key: 'stealFail' };
-            updatedPlayers[stealerIndex] = updatedStealer;
-            return {
-                ...state,
-                players: updatedPlayers,
-                gameMessage,
-                isStealFailure: true,
-                isCardModalOpen: false,
-            }
+          gameMessage = { key: 'noOneToStealFrom' };
         }
-        
+      } else {
+        gameMessage = { key: 'stealFail' };
         updatedPlayers[stealerIndex] = updatedStealer;
-
         return {
-            ...state,
-            players: updatedPlayers,
-            gameMessage,
-            isCardModalOpen: false,
+          ...state,
+          players: updatedPlayers,
+          gameMessage,
+          isStealFailure: true,
+          isCardModalOpen: false,
         }
+      }
+
+      updatedPlayers[stealerIndex] = updatedStealer;
+
+      return {
+        ...state,
+        players: updatedPlayers,
+        gameMessage,
+        isCardModalOpen: false,
+      }
     }
     case 'RESET_GAME':
-        return {
-            ...initialState,
-            language: state.language,
-        };
+      return {
+        ...initialState,
+        language: state.language,
+      };
     case 'CLEAR_CARD_AWARD':
-        return {
-            ...state,
-            lastCardAwarded: null,
-            isPickingPlayer: true,
-        }
+      return {
+        ...state,
+        lastCardAwarded: null,
+        isPickingPlayer: true,
+      }
     case 'SET_GAME_MESSAGE':
-        return { ...state, gameMessage: action.payload };
+      return { ...state, gameMessage: action.payload };
     default:
       return state;
   }
