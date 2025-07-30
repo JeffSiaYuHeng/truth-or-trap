@@ -17,12 +17,6 @@ export const CARD_DETAILS: Record<Card, {
     [Language.CN]: { name: '免除卡', description: '跳过你的回合一次。' },
     [Language.MY]: { name: 'Kad Imuniti', description: 'Langkau giliran anda sekali.' },
   },
-  [Card.REVERSE]: {
-    image: '/images/cards/REVERSE_CARD.jpg',
-    [Language.EN]: { name: 'Reverse Card', description: 'Push your challenge to the previous player.' },
-    [Language.CN]: { name: '反转卡', description: '将你的挑战推给前一位玩家。' },
-    [Language.MY]: { name: 'Kad Songsang', description: 'Tolak cabaran anda kepada pemain sebelumnya.' },
-  },
   [Card.BATTLE]: {
     image: '/images/cards/BATTLE_CARD.jpg',
     [Language.EN]: { name: 'Battle Card', description: 'Challenge a player to rock-paper-scissors. Loser does the dare.' },

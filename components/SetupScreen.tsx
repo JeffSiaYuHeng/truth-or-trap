@@ -3,9 +3,11 @@ import { AppContext } from "../App";
 import { useLocalization } from "../context/LocalizationContext";
 import { Player, Language, Difficulty } from "../types";
 import { AVATARS } from "../constants";
+import Tutorial from "../components/tutorial"; // Adjust path if needed
 
 const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useLocalization();
+
   const languages = [
     { code: Language.EN, label: "EN" },
     { code: Language.CN, label: "中文" },
@@ -32,6 +34,7 @@ const LanguageSelector: React.FC = () => {
 
 const SetupScreen: React.FC = () => {
   const appContext = useContext(AppContext);
+    const [showTutorial, setShowTutorial] = useState(false); // ✅ Moved here
   if (!appContext) {
     throw new Error("SetupScreen must be used within an AppContext.Provider");
   }
@@ -74,7 +77,7 @@ const SetupScreen: React.FC = () => {
           />
           <LanguageSelector />
         </header>
-
+        {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} />}
         <section>
           <h2 className="text-2xl font-bold text-gray-800 mb-3">
             {t("players")}
@@ -188,6 +191,12 @@ const SetupScreen: React.FC = () => {
               {t("newGame")}
             </button>
           )}
+          <button
+  onClick={() => setShowTutorial(true)}
+  className="w-full text-md font-bold py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition-all mb-4"
+>
+  📘 {t("tutorial") || "Show Tutorial"}
+</button>
         </div>
       </div>
     </div>

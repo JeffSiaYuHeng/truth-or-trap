@@ -69,11 +69,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (lastPlayerIndex !== null && state.currentChallenge.text && Math.random() < 0.35) {
         let updatedPlayers = [...state.players];
         const droppableCards: Card[] = [
-          Card.REVERSE, Card.REVERSE, Card.REVERSE,       // Common
-          Card.BATTLE, Card.BATTLE, Card.BATTLE,          // Uncommon
-          Card.STEAL, Card.STEAL,                         // Uncommon
-          Card.IMMUNITY,                                  // Rare
-          Card.KING,                                      // Rarest
+          Card.BATTLE, Card.BATTLE, Card.BATTLE,        // Uncommon (30%)
+          Card.STEAL, Card.STEAL,                       // Uncommon (20%)
+          Card.IMMUNITY,                                // Rare (10%)
+          Card.KING                                     // Rarest (10%)
+          // 总数 7 张卡，控制概率通过重复次数
         ];
         const randomCard = droppableCards[Math.floor(Math.random() * droppableCards.length)];
 
@@ -218,32 +218,6 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       let nextState = { ...state, isCardModalOpen: false };
 
       switch (cardToUse) {
-        case Card.REVERSE: {
-          if (state.previousPlayerIndex === null || !state.currentChallenge.text) {
-            // This case should be prevented by UI, but as a safeguard:
-            return state;
-          }
-
-          const reversedPlayerIndex = state.previousPlayerIndex;
-          const reversedPlayer = state.players[reversedPlayerIndex];
-
-          updatedPlayers[playerIndex] = updatedPlayer; // player with card removed
-
-          return {
-            ...nextState,
-            players: updatedPlayers,
-            // The challenge remains the same, but the player changes.
-            currentPlayerIndex: reversedPlayerIndex,
-            // The 'previous' player is now the one who reversed the card.
-            // This allows for a reverse-back, which could be fun.
-            previousPlayerIndex: playerIndex,
-            isForcedDare: false, // Reversing shouldn't force a dare on the unsuspecting recipient
-            gameMessage: {
-              key: 'reverseUsed',
-              options: { userName: player.name, previousPlayerName: reversedPlayer.name }
-            },
-          };
-        }
         case Card.IMMUNITY: {
           updatedPlayers[playerIndex] = updatedPlayer;
           return {

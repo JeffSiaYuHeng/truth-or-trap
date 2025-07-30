@@ -24,7 +24,6 @@ export enum ChallengeType {
 
 export enum Card {
   IMMUNITY = 'IMMUNITY',       // 免除卡
-  REVERSE = 'REVERSE',       // 反转卡
   BATTLE = 'BATTLE',         // 对战卡
   STEAL = 'STEAL',           // 偷取卡
   KING = 'KING',             // 国王卡

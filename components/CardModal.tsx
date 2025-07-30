@@ -57,10 +57,6 @@ const CardModal: React.FC = () => {
 
   const isCardDisabled = (card: Card): boolean => {
     switch (card) {
-      case Card.REVERSE:
-        // Can only be used if there is a challenge AND a previous player to reverse to.
-        return !hasChallenge || state.previousPlayerIndex === null;
-
       // Immunity can be used anytime to skip the current action (choosing T/D or doing the challenge)
       case Card.IMMUNITY:
         return false;
