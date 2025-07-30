@@ -103,23 +103,24 @@ const SetupScreen: React.FC = () => {
               </div>
             ))}
           </div>
-          <div className="flex mt-3 gap-2">
-            <input
-              type="text"
-              value={newPlayerName}
-              onChange={(e) => setNewPlayerName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleAddPlayer()}
-              placeholder={t("playerName")}
-              className="flex-grow bg-gray-100 border-2 border-gray-200 focus:border-[#FAB655] focus:ring-0 text-gray-900 rounded-lg px-4 py-2 transition"
-            />
-            <button
-              onClick={handleAddPlayer}
-              style={{ backgroundColor: "#FAB655" }}
-              className="hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
-            >
-              {t("addPlayer")}
-            </button>
-          </div>
+          <div className="flex mt-3 gap-2 w-full max-w-md">
+  <input
+    type="text"
+    value={newPlayerName}
+    onChange={(e) => setNewPlayerName(e.target.value)}
+    onKeyDown={(e) => e.key === "Enter" && handleAddPlayer()}
+    placeholder={t("playerName")}
+    className="flex-grow bg-gray-100 border-2 border-gray-200 focus:border-[#FAB655] focus:ring-0 text-gray-900 rounded-lg px-4 py-2 transition min-w-0"
+  />
+  <button
+    onClick={handleAddPlayer}
+    style={{ backgroundColor: "#FAB655" }}
+    className="hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
+  >
+    {t("addPlayer")}
+  </button>
+</div>
+
         </section>
 
         <section>
