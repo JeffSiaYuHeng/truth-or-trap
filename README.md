@@ -1,116 +1,58 @@
-# Truth or Trap
+# 🎮 Truth or Trap
 
-This is a web-based "Truth or Dare" party game with a twist. Players take turns choosing between a "truth" or a "dare", but they also have special cards that can be used to turn the tables on their opponents.
+> **Core Philosophy**: A high-tactile, "Vibrant" minimalist party game designed for mobile devices. It combines the classic *Truth or Dare* format with strategic card-based gameplay and chance events.
 
-## Features
+## 🎨 Design Philosophy: VIBRANT
 
-*   **Multiplayer:** Play with 2 or more players.
-*   **Localization:** Supports English, Chinese, and Malay.
-*   **Difficulty Levels:** Choose between Simple, Normal, and Extreme difficulty levels for the challenges.
-*   **Special Cards:** Use cards to gain advantages, such as immunity from a challenge, battling another player, stealing their cards, or even creating your own custom truth or dare.
-*   **Persistent State:** The game state is saved to local storage, so you can pick up where you left off.
+The application follows the **VIBRANT 1.0** UI/UX Design System, prioritizing high engagement, tactile feedback, and a premium "coloring-book" aesthetic.
 
-## Getting Started
+### Core Principles
+- **Minimalist Emojis**: Emojis are purposefully stripped from key interaction points to maintain a premium, stable aesthetic.
+- **The "Juice" Principle**: Every interaction is tactile. Buttons have physical "lips" (3D shadows) that depress when clicked to simulate real-world presses.
+- **Vertical Focus**: All core game elements are centered vertically for better ergonomics on mobile devices.
+- **Contextual UI**: Screens transition smoothly, hiding unnecessary elements (like the card inventory) during high-focus challenge moments.
 
-### Prerequisites
+### Visual Foundations
+- **Typography**: Geometric rounded sans-serif (**Varela Round**) for a friendly tone.
+- **AI Avatars**: Dynamic player avatars powered by the **DiceBear Open Peeps API**.
+- **Bottom Sheets**: Modern interaction patterns using sliding sheets instead of standard modals.
 
-*   [Node.js](https://nodejs.org/) installed on your machine.
+## 🚀 Features & Mechanics
 
-### Installation
+### 1. Setup Phase
+- **Player Entry**: Dynamic lobby supporting 2+ players with automated avatar generation.
+- **Difficulty Selection**:
+    - **Simple**: Light, fun, and perfect for warming up.
+    - **Normal**: The classic experience with a balanced mix of secrets and silly tasks.
+    - **Extreme**: Pushes limits for the truly brave.
+- **Language Port**: Instant switching between **English (🇺🇸)**, **Chinese (🇨🇳)**, and **Malay (🇲🇾)**.
+- **Tutorial Port**: Interactive wizard to explain rules and card designs.
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/truth-or-trap.git
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd truth-or-trap
-    ```
-3.  Install the dependencies:
-    ```bash
-    npm install
-    ```
+### 2. Core Gameplay Loop
+- **The Roulette**: Randomly selects the "Active Player" each round.
+- **The 2x Streak (Forced Dare)**: If the same player is picked **twice in a row**, they are locked into a **Forced Dare** (cannot choose Truth).
+- **Decision Phase**: Active player chooses **Truth** (Terms apply) or **Dare**.
+    - *Accessibility*: Uses distinctive patterns (Dots vs. Stripes) for visual clarity.
+- **Challenge Phase**:
+    - **No Retreat**: "Skip Challenge" is disabled. All challenges are mandatory.
+    - **DONE Action**: Prominent completion verification.
 
-### Running the Application
+### 3. The Trap Card System
+Players can access their inventory during the Decision Phase. Cards are earned via streaks or random events.
 
-To start the development server, run the following command:
+| Card Type | Icon | Mechanism |
+| :--- | :--- | :--- |
+| **Immunity** | 🛡️ | **Skip Turn**: Skip a Truth or Dare entirely without penalty. |
+| **Battle** | ⚔️ | **RPS Duel**: Challenge a player to Rock-Paper-Scissors. The loser takes a high-stakes Dare. |
+| **Steal** | 🕵️ | **Theft (75%)**: Attempt to steal an Immunity Card. Failure results in a punishment Challenge. |
+| **King** | 👑 | **Decree**: Write a custom challenge and force it upon any target player. |
 
-```bash
-npm run dev
-```
-
-This will start the application on `http://localhost:5173`.
-
-## Game Rules
-
-1.  **Setup:**
-    *   Add at least two players.
-    *   Choose a difficulty level for the challenges.
-    *   Select a language for the game.
-2.  **Gameplay:**
-    *   A player is randomly selected to start the game.
-    *   The current player chooses between a "truth" or a "dare".
-    *   A random challenge is presented to the player.
-    *   After completing the challenge, there is a chance to receive a special card.
-3.  **Cards:**
-    *   Players can use their special cards at any time during their turn.
-    *   See the "Card Types" section for more details on each card.
-4.  **Winning:**
-    *   There is no winning condition in this game. The goal is to have fun and complete the challenges.
-
-## Card Types
-
-*   **Immunity Card:** Skip your turn once.
-*   **Battle Card:** Challenge another player to a game of rock-paper-scissors. The loser has to complete the dare.
-*   **Steal Card:** Attempt to steal a card from another player (75% chance of success).
-*   **King Card:** Create your own custom truth or dare for any player.
-
-## Project Structure
-
-```
-.
-├── src
-│   ├── components
-│   │   ├── BattleModal.tsx
-│   │   ├── BattleSetupModal.tsx
-│   │   ├── CardAwardPopup.tsx
-│   │   ├── CardModal.tsx
-│   │   ├── GameScreen.tsx
-│   │   ├── KingCardModal.tsx
-│   │   ├── SetupScreen.tsx
-│   │   ├── StealSetupModal.tsx
-│   │   └── tutorial.tsx
-│   ├── context
-│   │   └── LocalizationContext.tsx
-│   ├── hooks
-│   │   └── gameReducer.ts
-│   ├── services
-│   │   ├── challenges.json
-│   │   └── challengeService.ts
-│   ├── App.tsx
-│   ├── constants.ts
-│   ├── index.tsx
-│   └── types.ts
-├── public
-│   └── images
-├── QuestionFile
-│   ├── new.py
-│   └── run.py
-├── package.json
-└── README.md
-```
-
-## Scripts
-
-*   `npm run dev`: Starts the development server.
-*   `npm run build`: Builds the application for production.
-*   `npm run preview`: Previews the production build locally.
+### 4. Rewards & Chance Events
+- **Dare Streak Reward**: Completing **3 Dares in a row** awards an automatic **Immunity Card**.
+- **Lucky Chance Events**: Random system interruptions after turns that gift a Trap Card to a player, keeping the game dynamic.
 
 ## Contributing
 
-The `QuestionFile` directory contains Python scripts for adding new truth or dare questions to the `challenges.json` file.
-
-*   `new.py`: A helper script to create a JSON file with a new question.
-*   `run.py`: A script to format and add a list of questions to the `challenges.json` file.
-
-To add new questions, modify the `truths` and `dares` lists in `run.py` and then run the script. This will generate a new JSON file with the questions, which can then be merged with the main `challenges.json` file.
+The `QuestionFile` directory contains Python scripts for expanding the `challenges.json` database.
+- `new.py`: Template generator for new questions.
+- `run.py`: Bulk formatting and processing script.

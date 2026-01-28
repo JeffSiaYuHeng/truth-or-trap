@@ -45,10 +45,10 @@ const KingCardModal: React.FC<KingCardModalProps> = ({ isOpen, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 space-y-6 border border-[#FAB655]" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full max-w-lg bg-white card-vibrant p-6 space-y-6" onClick={(e) => e.stopPropagation()}>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-3xl font-bold text-[#FAB655]">{t('kingCardTitle')}</h2>
+                        <h2 className="text-3xl font-black text-[#FAB655] uppercase tracking-tighter">{t('kingCardTitle')}</h2>
                         <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-800 text-3xl font-light">&times;</button>
                     </div>
 
@@ -58,30 +58,32 @@ const KingCardModal: React.FC<KingCardModalProps> = ({ isOpen, onClose }) => {
                             id="target-player"
                             value={targetPlayerId}
                             onChange={(e) => setTargetPlayerId(e.target.value)}
-                            className="w-full bg-gray-100 border-2 border-gray-200 focus:border-[#FAB655] focus:ring-0 text-gray-900 rounded-lg px-4 py-3 transition"
+                            className="w-full bg-white border-2 border-gray-200 focus:border-[#FAB655] outline-none rounded-xl px-4 py-3 transition text-gray-800 font-bold"
                             required
                         >
                             <option value="" disabled>{t('selectPlayer')}</option>
                             {targetablePlayers.map(player => (
                                 <option key={player.id} value={player.id}>
-                                    {player.avatar} {player.name}
+                                    {player.name}
                                 </option>
                             ))}
                         </select>
                     </div>
 
                     <div>
-                         <label className="block text-lg font-bold text-gray-700 mb-2">{t('challengeType')}</label>
-                         <div className="flex gap-4">
-                             <button type="button" onClick={() => setChallengeType(ChallengeType.TRUTH)} className={`flex-1 font-bold py-3 rounded-lg transition-all ${challengeType === ChallengeType.TRUTH ? 'bg-sky-500 text-white ring-2 ring-offset-2 ring-sky-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>
-                                 {t('truth')}
-                             </button>
-                             <button type="button" onClick={() => setChallengeType(ChallengeType.DARE)} className={`flex-1 font-bold py-3 rounded-lg transition-all ${challengeType === ChallengeType.DARE ? 'bg-rose-500 text-white ring-2 ring-offset-2 ring-rose-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>
-                                 {t('dare')}
-                             </button>
-                         </div>
+                        <label className="block text-lg font-bold text-gray-700 mb-2">{t('challengeType')}</label>
+                        <div className="flex gap-4">
+                            <button type="button" onClick={() => setChallengeType(ChallengeType.TRUTH)}
+                                className={`btn-vibrant flex-1 py-3 ${challengeType === ChallengeType.TRUTH ? 'btn-blue scale-105' : 'bg-gray-100 shadow-[0_4px_0_#E5E5E5] text-gray-500'}`}>
+                                {t('truth')}
+                            </button>
+                            <button type="button" onClick={() => setChallengeType(ChallengeType.DARE)}
+                                className={`btn-vibrant flex-1 py-3 ${challengeType === ChallengeType.DARE ? 'btn-error scale-105' : 'bg-gray-100 shadow-[0_4px_0_#E5E5E5] text-gray-500'}`}>
+                                {t('dare')}
+                            </button>
+                        </div>
                     </div>
-                    
+
                     <div>
                         <label htmlFor="challenge-text" className="block text-lg font-bold text-gray-700 mb-2">{t('challengeText')}</label>
                         <textarea
@@ -89,13 +91,13 @@ const KingCardModal: React.FC<KingCardModalProps> = ({ isOpen, onClose }) => {
                             value={challengeText}
                             onChange={(e) => setChallengeText(e.target.value)}
                             placeholder={t('customChallengePlaceholder')}
-                            className="w-full bg-gray-100 border-2 border-gray-200 focus:border-[#FAB655] focus:ring-0 text-gray-900 rounded-lg px-4 py-3 transition resize-none"
+                            className="w-full bg-white border-2 border-gray-200 focus:border-[#FAB655] outline-none rounded-xl px-4 py-3 transition resize-none text-gray-800 font-medium"
                             rows={3}
                             required
                         />
                     </div>
 
-                    <button type="submit" style={{backgroundColor: '#FAB655'}} className="w-full text-xl text-white font-bold py-4 rounded-lg transition-all duration-300 ease-in-out hover:shadow-lg hover:opacity-90 hover:scale-105">
+                    <button type="submit" className="btn-vibrant w-full py-4 text-xl">
                         {t('setTheChallenge')}
                     </button>
                 </form>

@@ -75,25 +75,28 @@ const CardModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
+      className={`fixed inset-0 bg-black/60 z-50 transition-opacity duration-300 ${state.isCardModalOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 space-y-4 border border-gray-200"
+        className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-[32px] p-8 space-y-6 transition-transform duration-300 shadow-[0_-8px_24px_rgba(0,0,0,0.1)] border-t-2 border-gray-100 ${state.isCardModalOpen ? 'translate-y-0' : 'translate-y-full'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold text-[#FAB655]">{t("myCards")}</h2>
+        <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-2" />
+        <div className="flex justify-between items-center px-2">
+          <h2 className="text-2xl font-black text-gray-800 uppercase tracking-tighter">
+            🎒 {t("yourItems") || "YOUR ITEMS"} ({currentPlayer.cards.length})
+          </h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-800 text-3xl font-light"
+            className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full text-gray-400 hover:text-gray-800 text-3xl"
           >
             &times;
           </button>
         </div>
 
         {currentPlayer.cards.length > 0 ? (
-          <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+          <div className="space-y-4 max-h-[50vh] overflow-y-auto pb-8">
             {currentPlayer.cards.map((card, index) => {
               const cardDetails = CARD_DETAILS[card];
               const cardLocalization =
@@ -101,25 +104,25 @@ const CardModal: React.FC = () => {
               return (
                 <div
                   key={`${card}-${index}`}
-                  className="bg-gray-100 p-3 rounded-lg flex items-center justify-between gap-4"
+                  className="bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-[#1CB0F6] active:scale-[0.98]"
                 >
                   <img
                     src={cardDetails.image}
                     alt={cardLocalization.name}
-                    className="w-12 h-16 flex-shrink-0"
+                    className="w-20 h-28 flex-shrink-0 rounded-xl shadow-md rotate-2"
                   />
                   <div className="flex-grow">
-                    <h3 className="font-bold text-gray-800 text-lg">
+                    <h3 className="font-bold text-gray-800 text-xl">
                       {cardLocalization.name}
                     </h3>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-500 text-sm leading-snug">
                       {cardLocalization.description}
                     </p>
                   </div>
                   <button
                     onClick={() => handleUseCard(card)}
                     disabled={isCardDisabled(card)}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none flex-shrink-0"
+                    className="btn-vibrant btn-success py-2 px-6"
                   >
                     {t("use")}
                   </button>
@@ -128,7 +131,10 @@ const CardModal: React.FC = () => {
             })}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">{t("noCards")}</p>
+          <div className="text-center py-12">
+            <div className="text-5xl mb-4 grayscale opacity-30">🃏</div>
+            <p className="text-gray-400 font-bold text-xl">{t("noCards")}</p>
+          </div>
         )}
       </div>
     </div>

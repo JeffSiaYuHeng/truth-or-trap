@@ -1,15 +1,13 @@
 import { Card, Language } from './types';
 
-export const AVATARS: string[] = [
-  '🥳', '😎', '😜', '😇', '😈', '😂', '🥰', '🤩',
-  '🤔', '🤯', '😱', '🤡', '👻', '👽', '🤖', '👑'
-];
+export const AVATARS: string[] = Array.from({ length: 16 }, (_, i) => `https://api.dicebear.com/9.x/open-peeps/svg?seed=player${i}`);
+
 
 export const CARD_DETAILS: Record<Card, {
-    image: string;
-    [Language.EN]: { name: string; description: string };
-    [Language.CN]: { name: string; description: string };
-    [Language.MY]: { name: string; description: string };
+  image: string;
+  [Language.EN]: { name: string; description: string };
+  [Language.CN]: { name: string; description: string };
+  [Language.MY]: { name: string; description: string };
 }> = {
   [Card.IMMUNITY]: {
     image: '/images/cards/IMMUNITY_CARD.jpg',

@@ -16,17 +16,17 @@ const translations: Record<Language, Record<string, string>> = {
     publicMode: "🏙️ Public Challenge",
     publicModeDesc: "Daring challenges for the great outdoors.",
     difficulty: "Difficulty",
-    simple: "😌 Simple",
+    simple: "Simple",
     simpleDesc: "Light & fun. Perfect for warming up.",
-    normal: "😬 Normal",
+    normal: "Normal",
     normalDesc: "The classic experience. A balanced mix.",
-    extreme: "🔥 Extreme",
+    extreme: "Extreme",
     extremeDesc: "Push your limits! For the truly brave.",
     startGame: "Start Game",
     continueGame: "Continue Game",
     newGame: "New Game",
-    truth: "🤐 Truth",
-    dare: "😈 Dare",
+    truth: "Truth",
+    dare: "Dare",
     nextPlayer: "Next Player",
     whosNext: "Who's next?",
     turn: "It's your turn,",
@@ -76,34 +76,18 @@ const translations: Record<Language, Record<string, string>> = {
     waitingForPlayer: "Waiting for {name}...",
     battleResult: "Battle Result",
     continue: "Continue",
-    instructionsContent: `🎉 Welcome to the world of Truth or Trap!
-
-🌀 Roulette System
-- Players enter their names and join the spinning wheel.
-- The wheel picks one player per round.
-- If the same player is chosen twice in a row, they must do a Dare.
-- After 3 completed Dares, a player receives an Immunity Card.
-
-🎲 Chance Events
-- After each round, a Chance Event may occur:
-  • Random card awarded (Immunity, Battle, Steal, King).
-  • Special instructions or bonus challenges.
-
-💬 Truth Levels
-- Easy: Fun/light (favorite food, etc.)
-- Medium: Mildly private (crushes, secrets).
-- Hard: Deep or personal.
-
-🎭 Dares
-- Might involve actions like photos, videos, messages, etc.
-- Some are silly, bold, or socially engaging.
-
-🃏 Special Cards
-- Immunity Card: Skip a turn.
-- Battle Card: Rock–Paper–Scissors with a player; loser faces a hard challenge.
-- Steal Card: Try stealing another player’s Immunity Card.
-- King Card: Force another player to do Truth or Dare.`,
-tutorial: 'Game Tutorial', // EN
+    tutorial: "How to Play",
+    tutWelcomeTitle: "🎉 Welcome!",
+    tutWelcomeText: "Truth or Trap is a party game where honesty meets strategy. It's simple: pick a truth or a dare, but watch out for the traps!",
+    tutRouletteTitle: "🌀 The Roulette",
+    tutRouletteText: "The game randomly picks a player for each round. If you're picked twice in a row, you're forced into a Dare! Complete 3 dares to earn a special card.",
+    tutChoiceTitle: "🤐 Truth or Dare?",
+    tutChoiceText: "Choose 'Truth' to answer a personal question or 'Dare' to perform a challenge. Challenges scale from Simple to Extreme based on your settings.",
+    tutCardsTitle: "🃏 Trap Cards",
+    tutCardsText: "Special cards add chaos! Use them to skip turns, duel others, or even create your own rules. Click a card to see its rules!",
+    tutReadyTitle: "🚀 Ready to Play?",
+    tutReadyText: "Add at least 2 players, pick your level of intensity, and let the chaos begin. Have fun and be safe!",
+    gotIt: "Got it!",
   },
   [Language.CN]: {
     title: "真心话大冒险陷阱",
@@ -111,17 +95,17 @@ tutorial: 'Game Tutorial', // EN
     addPlayer: "添加玩家",
     playerName: "玩家姓名",
     difficulty: "游戏难度",
-    simple: "😌 简单",
+    simple: "简单",
     simpleDesc: "轻松有趣，适合热身。",
-    normal: "😬 普通",
+    normal: "普通",
     normalDesc: "经典体验，平衡的组合。",
-    extreme: "🔥 极限",
+    extreme: "极限",
     extremeDesc: "挑战极限，为真正的勇者准备。",
     startGame: "开始游戏",
     continueGame: "继续游戏",
     newGame: "新游戏",
-    truth: "🤐 真心话",
-    dare: "😈 大冒险",
+    truth: "真心话",
+    dare: "大冒险",
     nextPlayer: "下一个玩家",
     whosNext: "轮到谁了？",
     turn: "轮到你了,",
@@ -171,34 +155,18 @@ tutorial: 'Game Tutorial', // EN
     waitingForPlayer: "等待 {name}...",
     battleResult: "对战结果",
     continue: "继续",
-    instructionsContent: `🎉 欢迎来到Truth or Trap的世界！
-
-🌀 轮盘机制
-- 玩家输入姓名加入轮盘。
-- 每轮随机选出一位玩家。
-- 若连续两次选中同一玩家，必须执行大冒险。
-- 累积完成3次大冒险后，将获得一张免除卡。
-
-🎲 命运事件
-- 每轮后有几率触发命运事件：
-  • 获得随机卡牌（免除、对战、偷取、国王）。
-  • 特殊指令或额外挑战。
-
-💬 真心话等级
-- 简单：轻松有趣（喜欢的食物等）。
-- 普通：略带隐私（暗恋、秘密）。
-- 极限：深入或私密问题。
-
-🎭 大冒险
-- 可能包括拍照、录影、发消息等。
-- 有些搞怪、有些大胆、有些社交互动感强。
-
-🃏 特殊卡牌
-- 免除卡：跳过回合。
-- 对战卡：与其他玩家猜拳，输家接受高难度挑战。
-- 偷取卡：尝试偷取他人免除卡。
-- 国王牌：强制一名玩家进行真心话或大冒险。`,
-tutorial: '游戏教学',      // CN
+    tutorial: "如何游玩",
+    tutWelcomeTitle: "🎉 欢迎！",
+    tutWelcomeText: "Truth or Trap 是一款结合诚实与策略的派对游戏。很简单：选择真心话或大冒险，但要小心陷阱！",
+    tutRouletteTitle: "🌀 轮盘选择",
+    tutRouletteText: "游戏每轮随机选择一名玩家。如果你连续两次被选中，将被强制进行大冒险！完成3次大冒险可获得一张特殊卡牌。",
+    tutChoiceTitle: "🤐 真心话大冒险？",
+    tutChoiceText: "选择“真心话”回答私人问题，或“大冒险”进行挑战。挑战难度根据您的设置从简单到极限。",
+    tutCardsTitle: "🃏 陷阱卡牌",
+    tutCardsText: "特殊卡牌增加混乱！使用它们来跳过回合、与他人对决，甚至制定自己的规则。点击卡牌查看规则！",
+    tutReadyTitle: "🚀 准备好了吗？",
+    tutReadyText: "添加至少2名玩家，选择你的强度级别，开始狂欢吧。祝你玩得开心，注意安全！",
+    gotIt: "知道了！",
 
   },
   [Language.MY]: {
@@ -207,17 +175,17 @@ tutorial: '游戏教学',      // CN
     addPlayer: "Tambah Pemain",
     playerName: "Nama Pemain",
     difficulty: "Tahap Kesukaran",
-    simple: "😌 Mudah",
+    simple: "Mudah",
     simpleDesc: "Ringan & seronok. Sesuai untuk memanaskan badan.",
-    normal: "😬 Biasa",
+    normal: "Biasa",
     normalDesc: "Pengalaman klasik. Campuran seimbang.",
-    extreme: "🔥 Ekstrem",
+    extreme: "Ekstrem",
     extremeDesc: "Cabar had anda! Untuk yang benar-benar berani.",
     startGame: "Mula Permainan",
     continueGame: "Sambung Permainan",
     newGame: "Permainan Baru",
-    truth: "🤐 Jujur",
-    dare: "😈 Berani",
+    truth: "Jujur",
+    dare: "Berani",
     nextPlayer: "Pemain Seterusnya",
     whosNext: "Siapa seterusnya?",
     turn: "Giliran awak,",
@@ -268,34 +236,18 @@ tutorial: '游戏教学',      // CN
     waitingForPlayer: "Menunggu {name}...",
     battleResult: "Keputusan Pertarungan",
     continue: "Teruskan",
-    tutorial: 'Tutorial Permainan', // MY
-    instructionsContent: `🎉 Selamat datang ke dunia Truth or Trap!
-
-🌀 Sistem Roda Berpusing
-- Pemain masukkan nama untuk sertai roda.
-- Roda akan pilih satu pemain setiap pusingan.
-- Jika pemain yang sama dipilih dua kali berturut-turut, mereka mesti buat cabaran "Dare".
-- Selepas 3 cabaran "Dare" berjaya, pemain akan dapat Kad Imuniti.
-
-🎲 Acara Peluang
-- Selepas setiap pusingan, acara rawak mungkin berlaku:
-  • Kad rawak diberikan (Imuniti, Pertarungan, Curi, Raja).
-  • Arahan khas atau cabaran bonus.
-
-💬 Tahap Soalan Jujur
-- Mudah: Ringan & seronok (makanan kegemaran dan sebagainya).
-- Biasa: Agak peribadi (crush, rahsia).
-- Ekstrem: Mendalam atau sangat peribadi.
-
-🎭 Cabaran "Dare"
-- Mungkin melibatkan gambar, video, mesej, dsb.
-- Ada yang lucu, berani, atau mencabar dari segi sosial.
-
-🃏 Kad Istimewa
-- Kad Imuniti: Langkau giliran.
-- Kad Pertarungan: Batu–Kertas–Gunting dengan pemain lain; yang kalah akan hadapi cabaran sukar.
-- Kad Curi: Curi Kad Imuniti daripada pemain lain.
-- Kad Raja: Paksa pemain lain untuk pilih Jujur atau Dare.`,
+    tutorial: "Cara Bermain",
+    tutWelcomeTitle: "🎉 Selamat Datang!",
+    tutWelcomeText: "Truth or Trap ialah permainan parti di mana kejujuran bertemu strategi. Mudahnya: pilih jujur atau berani, tetapi awas dengan perangkap!",
+    tutRouletteTitle: "🌀 Roda Putar",
+    tutRouletteText: "Permainan memilih pemain secara rawak setiap pusingan. Jika anda dipilih dua kali berturut-turut, anda dipaksa melakukan Cabaran! Selesaikan 3 cabaran untuk dapatkan kad istimewa.",
+    tutChoiceTitle: "🤐 Jujur atau Berani?",
+    tutChoiceText: "Pilih 'Jujur' untuk jawab soalan peribadi atau 'Berani' untuk lakukan cabaran. Tahap cabaran bermula dari Mudah sehingga Ekstrem berdasarkan tetapan anda.",
+    tutCardsTitle: "🃏 Kad Perangkap",
+    tutCardsText: "Kad istimewa menambah kekacauan! Gunakannya untuk langkau giliran, bertarung dengan orang lain, atau cipta peraturan sendiri. Klik kad untuk lihat peraturan!",
+    tutReadyTitle: "🚀 Sedia Beraksi?",
+    tutReadyText: "Tambah sekurang-kurangnya 2 pemain, pilih tahap keseruan anda, dan mulakan kegilaan. Selamat berseronok dan jaga keselamatan!",
+    gotIt: "Faham!",
 
   },
 };

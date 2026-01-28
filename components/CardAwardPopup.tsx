@@ -10,7 +10,7 @@ const CardAwardPopup: React.FC = () => {
 
     const { state, dispatch } = appContext;
     const { t, language } = useLocalization();
-    
+
     if (!state.lastCardAwarded) {
         return null;
     }
@@ -25,29 +25,28 @@ const CardAwardPopup: React.FC = () => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 animate-fade-in">
-            <div 
-                className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 space-y-6 border-2 border-[#FAB655] text-center animate-drop-and-bounce"
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4">
+            <div
+                className="w-full max-w-sm bg-white card-vibrant p-8 space-y-6 text-center animate-drop-and-bounce"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="space-y-4">
-                     <div className="text-6xl animate-wiggle">🎉</div>
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <div className="text-7xl animate-bounce">🎉</div>
+                    <h2 className="text-3xl font-black text-gray-800 uppercase tracking-tighter">
                         {t('cardObtained')}
                     </h2>
-                    <p className="text-lg text-gray-700">
+                    <p className="text-lg text-gray-500 font-bold">
                         {t('chanceCardAwarded', { playerName, cardName: cardLocalization.name })}
                     </p>
-                    <div className="bg-yellow-50 p-4 rounded-lg flex flex-col items-center justify-center gap-2 border border-yellow-200">
-<img src={cardDetails.image} alt={cardLocalization.name} className="w-24 h-32 mb-2" />
-                        <h3 className="font-bold text-yellow-800 text-xl">{cardLocalization.name}</h3>
-                        <p className="text-yellow-700 text-sm">{cardLocalization.description}</p>
+                    <div className="bg-gray-50 p-6 rounded-2xl flex flex-col items-center justify-center gap-3 border-2 border-gray-100 shadow-inner">
+                        <img src={cardDetails.image} alt={cardLocalization.name} className="w-32 h-44 mb-2 rounded-xl shadow-lg transform -rotate-3 transition-transform hover:rotate-0" />
+                        <h3 className="font-bold text-gray-800 text-2xl">{cardLocalization.name}</h3>
+                        <p className="text-gray-500 text-xs leading-snug">{cardLocalization.description}</p>
                     </div>
                 </div>
-                 <button 
-                    onClick={handleClose} 
-                    style={{backgroundColor: '#FAB655'}}
-                    className="w-full mt-4 text-xl text-white font-bold py-3 rounded-lg transition-all duration-300 ease-in-out hover:shadow-lg hover:opacity-90 hover:scale-105"
+                <button
+                    onClick={handleClose}
+                    className="btn-vibrant btn-success w-full py-4 text-xl"
                 >
                     {t('continue')}
                 </button>

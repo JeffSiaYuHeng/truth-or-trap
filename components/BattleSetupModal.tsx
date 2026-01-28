@@ -32,11 +32,11 @@ const BattleSetupModal: React.FC<BattleSetupModalProps> = ({ onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-6 space-y-6 border border-red-300" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full max-w-sm bg-white card-vibrant p-6 space-y-6" onClick={(e) => e.stopPropagation()}>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-3xl font-bold text-red-500">{t('battleTitle')}</h2>
-                        <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-800 text-3xl font-light">&times;</button>
+                        <h2 className="text-3xl font-black text-red-500 uppercase tracking-tighter">{t('battleTitle')}</h2>
+                        <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-800 text-3xl">&times;</button>
                     </div>
 
                     <div>
@@ -45,19 +45,19 @@ const BattleSetupModal: React.FC<BattleSetupModalProps> = ({ onClose }) => {
                             id="target-player"
                             value={targetPlayerId}
                             onChange={(e) => setTargetPlayerId(e.target.value)}
-                            className="w-full bg-gray-100 border-2 border-gray-200 focus:border-red-500 focus:ring-0 text-gray-900 rounded-lg px-4 py-3 transition"
+                            className="w-full bg-white border-2 border-gray-200 focus:border-red-500 outline-none rounded-xl px-4 py-3 transition text-gray-800 font-bold"
                             required
                         >
                             <option value="" disabled>{t('selectPlayer')}</option>
                             {targetablePlayers.map(player => (
                                 <option key={player.id} value={player.id}>
-                                    {player.avatar} {player.name}
+                                    {player.name}
                                 </option>
                             ))}
                         </select>
                     </div>
 
-                    <button type="submit" className="w-full text-xl text-white font-bold py-4 rounded-lg transition-all duration-300 ease-in-out bg-red-500 hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/50 hover:scale-105">
+                    <button type="submit" className="btn-vibrant btn-error w-full text-xl py-4">
                         {t('challengePlayer')}
                     </button>
                 </form>

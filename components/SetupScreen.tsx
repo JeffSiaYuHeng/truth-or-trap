@@ -9,21 +9,20 @@ const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useLocalization();
 
   const languages = [
-    { code: Language.EN, label: "EN" },
-    { code: Language.CN, label: "中文" },
-    { code: Language.MY, label: "MY" },
+    { code: Language.EN, label: "🇺🇸" },
+    { code: Language.CN, label: "🇨🇳" },
+    { code: Language.MY, label: "🇲🇾" },
   ];
   return (
-    <div className="flex justify-center space-x-2 my-4">
+    <div className="flex bg-white/50 p-1.5 rounded-2xl border-2 border-gray-100 backdrop-blur-sm">
       {languages.map((lang) => (
         <button
           key={lang.code}
           onClick={() => setLanguage(lang.code)}
-          className={`px-4 py-2 text-sm font-bold rounded-full transition-all duration-300 ${
-            language === lang.code
-              ? "bg-[#FAB655] text-white shadow-lg scale-110"
-              : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-          }`}
+          className={`px-4 py-2 flex items-center justify-center rounded-xl text-xl transition-all duration-300 ${language === lang.code
+            ? "bg-[#FAB655] text-white shadow-md scale-105"
+            : "text-gray-400 hover:bg-gray-50"
+            }`}
         >
           {lang.label}
         </button>
@@ -34,7 +33,7 @@ const LanguageSelector: React.FC = () => {
 
 const SetupScreen: React.FC = () => {
   const appContext = useContext(AppContext);
-    const [showTutorial, setShowTutorial] = useState(false); // ✅ Moved here
+  const [showTutorial, setShowTutorial] = useState(false);
   if (!appContext) {
     throw new Error("SetupScreen must be used within an AppContext.Provider");
   }
@@ -67,138 +66,118 @@ const SetupScreen: React.FC = () => {
     state.players.length >= 2 && state.currentPlayerIndex !== null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 space-y-6">
-        <header className="text-center">
-          <img
-            src="/images/logo/logo.png"
-            alt={t("title")}
-            className="w-64 mx-auto mb-2"
-          />
+    <div className="min-h-screen flex flex-col bg-gray-50 pb-32">
+      <div className="w-full max-w-md mx-auto px-4 pt-4">
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() => setShowTutorial(true)}
+            className="group flex items-center gap-2 bg-white/50 backdrop-blur-sm border-2 border-gray-100 rounded-full py-2 px-4 shadow-sm hover:border-[#1CB0F6] transition-all duration-300"
+          >
+            <span className="text-lg group-hover:rotate-12 transition-transform">❓</span>
+            <span className="text-xs font-black text-gray-400 uppercase tracking-widest group-hover:text-[#1CB0F6]">
+              {t("tutorial") || "How to Play"}
+            </span>
+          </button>
           <LanguageSelector />
-        </header>
+        </div>
+      </div>
+
+      <div className="w-full max-w-md mx-auto flex-grow flex flex-col justify-center space-y-8 px-4 py-8">
         {showTutorial && <Tutorial onClose={() => setShowTutorial(false)} />}
-        <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">
+        <section className="card-vibrant bg-white">
+          <h2 className="text-xl font-black text-gray-800 mb-4 uppercase tracking-tight">
             {t("players")}
           </h2>
-          <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-            {state.players.map((player) => (
+
+          <div className="flex mb-4 gap-2">
+            <input
+              type="text"
+              value={newPlayerName}
+              onChange={(e) => setNewPlayerName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAddPlayer()}
+              placeholder={t("playerName")}
+              className="flex-grow bg-gray-50 border-2 border-gray-200 focus:border-[#FAB655] outline-none rounded-2xl px-4 py-3 transition min-w-0 font-bold"
+            />
+            <button
+              onClick={handleAddPlayer}
+              className="btn-vibrant py-3 px-6 rounded-2xl text-xl"
+            >
+              +
+            </button>
+          </div>
+
+          <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+            {[...state.players].reverse().map((player) => (
               <div
                 key={player.id}
-                className="flex items-center justify-between bg-gray-100 p-2 rounded-lg"
+                className="flex items-center justify-between bg-gray-50 p-3 rounded-2xl border-2 border-transparent hover:border-gray-100 transition-all"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{player.avatar}</span>
-                  <span className="font-semibold">{player.name}</span>
+                <div className="flex items-center gap-4">
+                  <div className="avatar-vibrant w-12 h-12 border-2 shadow-sm">
+                    <img src={player.avatar} alt={player.name} className="w-full h-full object-cover" />
+                  </div>
+                  <span className="font-bold text-gray-700 text-lg">{player.name}</span>
                 </div>
                 <button
                   onClick={() =>
                     dispatch({ type: "REMOVE_PLAYER", payload: player.id })
                   }
-                  className="text-red-500 hover:text-red-600 text-xl font-bold"
+                  className="w-8 h-8 flex items-center justify-center bg-red-100 text-red-500 rounded-full font-black text-xl hover:bg-red-200 transition-colors"
                 >
                   &times;
                 </button>
               </div>
             ))}
           </div>
-          <div className="flex mt-3 gap-2 w-full max-w-md">
-  <input
-    type="text"
-    value={newPlayerName}
-    onChange={(e) => setNewPlayerName(e.target.value)}
-    onKeyDown={(e) => e.key === "Enter" && handleAddPlayer()}
-    placeholder={t("playerName")}
-    className="flex-grow bg-gray-100 border-2 border-gray-200 focus:border-[#FAB655] focus:ring-0 text-gray-900 rounded-lg px-4 py-2 transition min-w-0"
-  />
-  <button
-    onClick={handleAddPlayer}
-    style={{ backgroundColor: "#FAB655" }}
-    className="hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105"
-  >
-    {t("addPlayer")}
-  </button>
-</div>
-
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-3">
+          <h2 className="text-xl font-black text-gray-800 mb-4 px-2 uppercase tracking-tight">
             {t("difficulty")}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button
-              onClick={() =>
-                dispatch({ type: "SET_DIFFICULTY", payload: Difficulty.SIMPLE })
-              }
-              className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                state.difficulty === Difficulty.SIMPLE
-                  ? "bg-white ring-2 ring-[#FAB655]"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              <h3 className="font-bold text-lg text-gray-800">{t("simple")}</h3>
-              <p className="text-sm text-gray-500">{t("simpleDesc")}</p>
-            </button>
-            <button
-              onClick={() =>
-                dispatch({ type: "SET_DIFFICULTY", payload: Difficulty.NORMAL })
-              }
-              className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                state.difficulty === Difficulty.NORMAL
-                  ? "bg-white ring-2 ring-[#FAB655]"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              <h3 className="font-bold text-lg text-gray-800">{t("normal")}</h3>
-              <p className="text-sm text-gray-500">{t("normalDesc")}</p>
-            </button>
-            <button
-              onClick={() =>
-                dispatch({
-                  type: "SET_DIFFICULTY",
-                  payload: Difficulty.EXTREME,
-                })
-              }
-              className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                state.difficulty === Difficulty.EXTREME
-                  ? "bg-white ring-2 ring-[#FAB655]"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              <h3 className="font-bold text-lg text-gray-800">
-                {t("extreme")}
-              </h3>
-              <p className="text-sm text-gray-500">{t("extremeDesc")}</p>
-            </button>
+          <div className="flex flex-col gap-4 px-2">
+            {[Difficulty.SIMPLE, Difficulty.NORMAL, Difficulty.EXTREME].map((level) => (
+              <button
+                key={level}
+                onClick={() => dispatch({ type: "SET_DIFFICULTY", payload: level })}
+                className={`w-full p-5 rounded-[24px] text-left transition-all duration-300 border-4 ${state.difficulty === level
+                  ? "bg-[#EDF9FF] border-[#1CB0F6] scale-100 shadow-inner"
+                  : "bg-white border-gray-100 opacity-70 hover:opacity-100"
+                  }`}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-black text-2xl text-gray-800 mb-1">
+                      {t(level.toLowerCase())}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-bold leading-tight">
+                      {t(`${level.toLowerCase()}Desc`)}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         </section>
+      </div>
 
-        <div className="pt-4 flex flex-col space-y-3">
+      <div className="sticky-footer flex flex-col items-center gap-3">
+        <button
+          onClick={handleStartGame}
+          disabled={state.players.length < 2}
+          className="btn-vibrant btn-success w-full max-w-md py-5 text-2xl animate-pop shadow-[0_8px_0_#46a302]"
+        >
+          {canContinue ? t("continueGame") : "START PARTY 🚀"}
+        </button>
+
+        {state.players.length > 0 && (
           <button
-            onClick={handleStartGame}
-            disabled={state.players.length < 2}
-            className="w-full text-xl bg-orange-300 text-white font-bold py-4 rounded-lg transition-all duration-300 ease-in-out disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed hover:shadow-lg hover:opacity-90 hover:scale-105"
+            onClick={() => dispatch({ type: "RESET_GAME" })}
+            className="text-gray-400 font-bold text-sm uppercase tracking-wider hover:text-gray-600"
           >
-            {canContinue ? t("continueGame") : t("startGame")}
+            {t("newGame")}
           </button>
-
-          {state.players.length > 0 && (
-            <button
-              onClick={() => dispatch({ type: "RESET_GAME" })}
-              className="w-full text-md font-bold py-2 rounded-lg bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors"
-            >
-              {t("newGame")}
-            </button>
-          )}
-          <button
-  onClick={() => setShowTutorial(true)}
-  className="w-full text-md font-bold py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition-all mb-4"
->
-  📘 {t("tutorial") || "Show Tutorial"}
-</button>
-        </div>
+        )}
       </div>
     </div>
   );

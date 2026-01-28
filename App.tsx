@@ -16,7 +16,7 @@ const App: React.FC = () => {
         const parsedState = JSON.parse(storedState) as GameState;
         // Ensure functions are not persisted, start fresh if screen is mid-game
         if (parsedState.currentScreen === Screen.GAME) {
-            parsedState.currentScreen = Screen.SETUP;
+          parsedState.currentScreen = Screen.SETUP;
         }
         return parsedState;
       }
@@ -33,7 +33,7 @@ const App: React.FC = () => {
       console.error("Failed to save state to localStorage", error);
     }
   }, [state]);
-  
+
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   const renderScreen = () => {
@@ -50,8 +50,8 @@ const App: React.FC = () => {
   return (
     <LocalizationProvider language={state.language} setLanguage={(lang) => dispatch({ type: 'SET_LANGUAGE', payload: lang })}>
       <AppContext.Provider value={contextValue}>
-        <div className="bg-gray-100 min-h-screen text-gray-900 font-sans antialiased">
-            {renderScreen()}
+        <div className="bg-white min-h-screen text-gray-800 antialiased">
+          {renderScreen()}
         </div>
       </AppContext.Provider>
     </LocalizationProvider>
