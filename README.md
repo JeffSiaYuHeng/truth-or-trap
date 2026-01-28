@@ -51,6 +51,24 @@ Players can access their inventory during the Decision Phase. Cards are earned v
 - **Dare Streak Reward**: Completing **3 Dares in a row** awards an automatic **Immunity Card**.
 - **Lucky Chance Events**: Random system interruptions after turns that gift a Trap Card to a player, keeping the game dynamic.
 
+## 📁 Project Structure
+
+```text
+truth-or-trap/
+├── components/        # UI components (Screens, Modals, Popups)
+├── context/           # React context for Localization (EN/CN/MY)
+├── hooks/             # Custom hooks (gameReducer.ts for core game logic)
+├── services/          # Data services and challenge database (JSON)
+├── QuestionFile/      # Python utility scripts for content management
+├── public/            # Static assets and game illustrations
+├── App.tsx             # Main application logic and navigation
+├── constants.ts       # Shared constants and game configurations
+├── types.ts           # TypeScript definitions for game state
+├── index.css          # VIBRANT design system and global styles
+├── GAME_MECHANICS.md  # Detailed rules and mechanics (English)
+└── 游戏.md             # Detailed rules and mechanics (Chinese)
+```
+
 ## Contributing
 
 The `QuestionFile` directory contains Python scripts for expanding the `challenges.json` database.
