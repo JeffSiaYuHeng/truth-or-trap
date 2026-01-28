@@ -13,6 +13,14 @@
   --gray-mid: #AFAFAF;
   --gray-dark: #4B4B4B;
   --tutorial-glow: rgba(28, 176, 246, 0.4);
+  
+  /* Difficulty specific colors */
+  --simple-bg: #EBF8E1;
+  --simple-border: #58CC02;
+  --normal-bg: #EDF9FF;
+  --normal-border: #1CB0F6;
+  --extreme-bg: #FFF0F0;
+  --extreme-border: #FF4B4B;
 }
 
 body {
@@ -86,9 +94,6 @@ body {
   transition: transform 0.2s, border-color 0.2s;
 }
 
-.card-vibrant:hover {
-  border-color: var(--blue);
-}
 
 .card-vibrant.selected {
   border-color: var(--blue);
@@ -107,6 +112,22 @@ body {
   color: #ea2b2b;
 }
 
+/* Difficulty Button States */
+.difficulty-btn.simple-selected {
+  background-color: var(--simple-bg);
+  border-color: var(--simple-border);
+}
+
+.difficulty-btn.normal-selected {
+  background-color: var(--normal-bg);
+  border-color: var(--normal-border);
+}
+
+.difficulty-btn.extreme-selected {
+  background-color: var(--extreme-bg);
+  border-color: var(--extreme-border);
+}
+
 /* Progress Bar */
 .progress-container {
   width: 100%;
@@ -120,7 +141,8 @@ body {
   height: 100%;
   background-color: var(--success);
   border-radius: 20px;
-  transition: width 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+  /* transition: width 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);  REMOVED BOUNCE */
+  transition: width 0.5s ease-out;
 }
 
 /* Bottom Sheets */
@@ -134,7 +156,8 @@ body {
   border-top-right-radius: 24px;
   padding: 24px;
   transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  /* Smooth, non-bouncy slide */
+  transition: transform 0.3s ease-out;
   z-index: 1000;
   box-shadow: 0 -8px 24px rgba(0,0,0,0.1);
 }
@@ -145,7 +168,8 @@ body {
 }
 
 .animate-card-fly {
-  animation: card-fly 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* Disable bouncy fly-in animation */
+  animation: none;
 }
 
 .bottom-sheet.open {
@@ -282,23 +306,17 @@ body {
   overflow: hidden;
   background: #f0f0f0;
 }
-@keyframes drop-and-bounce {
-  0% { transform: translateY(-50px) scale(0.9); opacity: 0; }
-  60% { transform: translateY(10px) scale(1.02); opacity: 1; }
-  100% { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes drop-fade-in {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
 .animate-drop-and-bounce {
-  animation: drop-and-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes bounce-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  animation: drop-fade-in 0.4s ease-out forwards;
 }
 
 .animate-bounce-slow {
-  animation: bounce-slow 2s infinite ease-in-out;
+  /* No bounce */
 }
 
 /* Fancy Tutorial Buttons */
@@ -311,7 +329,8 @@ body {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   box-shadow: 0 6px 0 #005f7a, 0 8px 15px var(--tutorial-glow);
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Use a standard easing for a non-bouncy feel */
+  transition: all 0.2s ease-out;
   border: 2px solid rgba(255,255,255,0.2);
   cursor: pointer;
 }
@@ -362,4 +381,152 @@ body {
 
 .transition-transform-600 {
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 32px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  border: 4px solid var(--gray-light);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Target Select Modal */
+.target-modal-header {
+  padding: 24px;
+  text-align: center;
+  border-bottom: 2px solid var(--gray-light);
+}
+
+.card-icon-display {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border: 3px solid var(--gray-light);
+}
+
+.card-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.target-modal-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--gray-dark);
+  margin-bottom: 4px;
+}
+
+.target-modal-subtitle {
+  font-size: 0.9rem;
+  color: var(--gray-mid);
+  font-weight: 600;
+}
+
+.target-player-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.target-player-item {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px !important;
+  text-align: left;
+  border-radius: 20px !important;
+}
+
+.target-player-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.4);
+  background: #eee;
+}
+
+.target-player-name {
+  flex-grow: 1;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.target-select-arrow {
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.target-cancel-btn {
+  margin: 16px 24px 24px;
+}
+
+/* Partner Link UI */
+.partner-link-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.partner-avatar-small {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--primary);
+  border-radius: 50%;
+  background: white;
+}
+
+.partner-link-icon {
+  font-size: 1.2rem;
+  color: var(--primary);
+  /* Remove bouncing from partner link icon */
+  animation: none;
+}
+
+/* Disable all remaining bouncy/attention-grabbing animations by default */
+.animate-shake,
+.animate-pop,
+.animate-pulse-ring,
+.animate-float,
+.animate-drop-and-bounce,
+.animate-bounce-slow {
+  animation: none !important;
+}
+
+/* Player name input – keep hover visually static */
+.player-input {
+  transition: none;
+}
+
+.player-input:hover {
+  background-color: #f9fafb; /* same as bg-gray-50 */
+  border-color: #e5e7eb;     /* same as border-gray-200 */
 }

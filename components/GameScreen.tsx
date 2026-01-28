@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../App';
 import { useLocalization } from '../context/LocalizationContext';
-import { ChallengeType } from '../types';
+import { ChallengeType, Card, ExecutionMode } from '../types';
 import { getRandomChallenge } from '../services/challengeService'; // local static data
 import CardModal from './CardModal';
 import BattleModal from './BattleModal';
 import CardAwardPopup from './CardAwardPopup';
+import TargetSelectModal from './TargetSelectModal';
 
 // PlayerPickerAnimation stays unchanged
 const PlayerPickerAnimation: React.FC = () => {
@@ -68,7 +69,13 @@ const GameScreen: React.FC = () => {
         }
     };
 
-    const handleNextPlayer = () => dispatch({ type: 'START_PLAYER_PICKING' });
+    const handleNextPlayer = () => {
+        if (state.currentChallenge.executionMode === ExecutionMode.SHARED && !state.currentChallenge.partnerCompleted) {
+            dispatch({ type: 'COMPLETE_PARTNER_TURN' });
+            return;
+        }
+        dispatch({ type: 'START_PLAYER_PICKING' });
+    };
 
     if (!currentPlayer && !state.isPickingPlayer && !state.battle) {
         return (
@@ -102,6 +109,21 @@ const GameScreen: React.FC = () => {
                         <div className={`absolute inset-0 opacity-5 ${state.currentChallenge.type === ChallengeType.TRUTH ? 'pattern-dots' : 'pattern-stripes'}`} />
 
                         <div className="relative z-10">
+                            {state.currentChallenge.executionMode === ExecutionMode.SHARED && state.currentChallenge.partnerIndex !== null && (
+                                <div className="partner-link-container animate-pop">
+                                    <img
+                                        src={state.players[state.currentChallenge.currentExecutorIndex ?? 0]?.avatar}
+                                        className="partner-avatar-small"
+                                        alt="executor"
+                                    />
+
+                                    <img
+                                        src={state.players[state.currentChallenge.partnerIndex]?.avatar}
+                                        className="partner-avatar-small"
+                                        alt="partner"
+                                    />
+                                </div>
+                            )}
                             <div className={`inline-block px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest mb-4 ${state.currentChallenge.type === ChallengeType.TRUTH ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600'}`}>
                                 {state.difficulty} {challengeTypeText}
                             </div>
@@ -116,7 +138,9 @@ const GameScreen: React.FC = () => {
                             onClick={handleNextPlayer}
                             className="btn-vibrant btn-success w-full py-5 text-2xl shadow-[0_8px_0_#46a302]"
                         >
-                            {t('done') || 'DONE'}
+                            {state.currentChallenge.executionMode === ExecutionMode.SHARED && !state.currentChallenge.partnerCompleted
+                                ? `${state.players[state.currentChallenge.partnerIndex ?? 0]?.name} ${t('done') || 'DONE'}`
+                                : t('done') || 'DONE'}
                         </button>
                     </div>
                 </div>
@@ -184,10 +208,11 @@ const GameScreen: React.FC = () => {
                 {currentPlayer && (
                     <div
                         onClick={() => dispatch({ type: 'OPEN_CARD_MODAL' })}
-                        className={`bottom-sheet-handle animate-bounce-slow flex flex-col items-center justify-center ${state.isPickingPlayer || state.isLoading || state.currentChallenge ? 'translate-y-full' : ''}`}
+                        className={`bottom-sheet-handle flex flex-col items-center justify-center ${state.isPickingPlayer || state.isLoading ? 'translate-y-full' : ''
+                            }`}
                     >
-                        <span className="text-xs font-black tracking-widest">
-                            ITEMS ({currentPlayer.cards.length})
+                        <span className="text-sm font-black tracking-widest flex items-center gap-2">
+                            {t("myCards") || "MY CARDS"} ({currentPlayer.cards.length})
                         </span>
                     </div>
                 )}
@@ -195,6 +220,28 @@ const GameScreen: React.FC = () => {
             {state.isCardModalOpen && <CardModal />}
             {state.battle && <BattleModal />}
             <CardAwardPopup />
+
+            {/* Mirror Card Target Selection */}
+            <TargetSelectModal
+                isOpen={state.isSelectingMirrorTarget}
+                cardType={Card.MIRROR}
+                players={state.players}
+                currentPlayerId={currentPlayer?.id || ''}
+                language={state.language as 'en' | 'cn' | 'my'}
+                onSelectTarget={(targetId) => dispatch({ type: 'APPLY_MIRROR_EFFECT', payload: { targetId } })}
+                onClose={() => dispatch({ type: 'CLOSE_MIRROR_TARGET_SELECT' })}
+            />
+
+            {/* Partner Card Target Selection */}
+            <TargetSelectModal
+                isOpen={state.isSelectingPartnerTarget}
+                cardType={Card.PARTNER}
+                players={state.players}
+                currentPlayerId={currentPlayer?.id || ''}
+                language={state.language as 'en' | 'cn' | 'my'}
+                onSelectTarget={(targetId) => dispatch({ type: 'APPLY_PARTNER_EFFECT', payload: { targetId } })}
+                onClose={() => dispatch({ type: 'CLOSE_PARTNER_TARGET_SELECT' })}
+            />
         </>
     );
 };

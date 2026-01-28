@@ -9,9 +9,9 @@ const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useLocalization();
 
   const languages = [
-    { code: Language.EN, label: "🇺🇸" },
-    { code: Language.CN, label: "🇨🇳" },
-    { code: Language.MY, label: "🇲🇾" },
+    // { code: Language.EN, label: "EN" }, 
+    { code: Language.CN, label: "CN" },
+    // { code: Language.MY, label: "MY" },  
   ];
   return (
     <div className="flex bg-white/50 p-1.5 rounded-2xl border-2 border-gray-100 backdrop-blur-sm">
@@ -73,7 +73,6 @@ const SetupScreen: React.FC = () => {
             onClick={() => setShowTutorial(true)}
             className="group flex items-center gap-2 bg-white/50 backdrop-blur-sm border-2 border-gray-100 rounded-full py-2 px-4 shadow-sm hover:border-[#1CB0F6] transition-all duration-300"
           >
-            <span className="text-lg group-hover:rotate-12 transition-transform">❓</span>
             <span className="text-xs font-black text-gray-400 uppercase tracking-widest group-hover:text-[#1CB0F6]">
               {t("tutorial") || "How to Play"}
             </span>
@@ -96,7 +95,7 @@ const SetupScreen: React.FC = () => {
               onChange={(e) => setNewPlayerName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddPlayer()}
               placeholder={t("playerName")}
-              className="flex-grow bg-gray-50 border-2 border-gray-200 focus:border-[#FAB655] outline-none rounded-2xl px-4 py-3 transition min-w-0 font-bold"
+              className="player-input flex-grow bg-gray-50 border-2 border-gray-200 focus:border-[#FAB655] outline-none rounded-2xl px-4 py-3 min-w-0 font-bold"
             />
             <button
               onClick={handleAddPlayer}
@@ -136,27 +135,35 @@ const SetupScreen: React.FC = () => {
             {t("difficulty")}
           </h2>
           <div className="flex flex-col gap-4 px-2">
-            {[Difficulty.SIMPLE, Difficulty.NORMAL, Difficulty.EXTREME].map((level) => (
-              <button
-                key={level}
-                onClick={() => dispatch({ type: "SET_DIFFICULTY", payload: level })}
-                className={`w-full p-5 rounded-[24px] text-left transition-all duration-300 border-4 ${state.difficulty === level
-                  ? "bg-[#EDF9FF] border-[#1CB0F6] scale-100 shadow-inner"
-                  : "bg-white border-gray-100 opacity-70 hover:opacity-100"
-                  }`}
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-black text-2xl text-gray-800 mb-1">
-                      {t(level.toLowerCase())}
-                    </h3>
-                    <p className="text-sm text-gray-500 font-bold leading-tight">
-                      {t(`${level.toLowerCase()}Desc`)}
-                    </p>
+            {[Difficulty.SIMPLE, Difficulty.NORMAL, Difficulty.EXTREME].map((level) => {
+              const isSelected = state.difficulty === level;
+              const difficultyClass =
+                level === Difficulty.SIMPLE ? "simple-selected" :
+                  level === Difficulty.NORMAL ? "normal-selected" :
+                    "extreme-selected";
+
+              return (
+                <button
+                  key={level}
+                  onClick={() => dispatch({ type: "SET_DIFFICULTY", payload: level })}
+                  className={`w-full p-5 rounded-[24px] text-left transition-all duration-300 border-4 difficulty-btn ${isSelected
+                    ? `${difficultyClass} scale-100 shadow-inner`
+                    : "bg-white border-gray-100 opacity-70 hover:opacity-100"
+                    }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="font-black text-2xl text-gray-800 mb-1">
+                        {t(level.toLowerCase())}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-bold leading-tight">
+                        {t(`${level.toLowerCase()}Desc`)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         </section>
       </div>
@@ -167,7 +174,7 @@ const SetupScreen: React.FC = () => {
           disabled={state.players.length < 2}
           className="btn-vibrant btn-success w-full max-w-md py-5 text-2xl animate-pop shadow-[0_8px_0_#46a302]"
         >
-          {canContinue ? t("continueGame") : "START PARTY 🚀"}
+          {canContinue ? t("continueGame") : "START PARTY"}
         </button>
 
         {state.players.length > 0 && (

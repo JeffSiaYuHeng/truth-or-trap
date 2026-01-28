@@ -68,6 +68,11 @@ const CardModal: React.FC = () => {
       case Card.BATTLE:
         return hasChallenge;
 
+      // These cards are used in response to or during a challenge.
+      case Card.MIRROR:
+      case Card.PARTNER:
+        return !hasChallenge;
+
       default:
         return false;
     }
@@ -85,7 +90,7 @@ const CardModal: React.FC = () => {
         <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-2" />
         <div className="flex justify-between items-center px-2">
           <h2 className="text-2xl font-black text-gray-800 uppercase tracking-tighter">
-            🎒 {t("yourItems") || "YOUR ITEMS"} ({currentPlayer.cards.length})
+            {t("yourItems") || "YOUR ITEMS"} ({currentPlayer.cards.length})
           </h2>
           <button
             onClick={handleClose}
@@ -132,7 +137,6 @@ const CardModal: React.FC = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="text-5xl mb-4 grayscale opacity-30">🃏</div>
             <p className="text-gray-400 font-bold text-xl">{t("noCards")}</p>
           </div>
         )}

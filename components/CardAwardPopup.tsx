@@ -31,7 +31,6 @@ const CardAwardPopup: React.FC = () => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="space-y-4">
-                    <div className="text-7xl animate-bounce">🎉</div>
                     <h2 className="text-3xl font-black text-gray-800 uppercase tracking-tighter">
                         {t('cardObtained')}
                     </h2>

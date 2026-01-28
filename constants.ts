@@ -33,4 +33,16 @@ export const CARD_DETAILS: Record<Card, {
     [Language.CN]: { name: '国王卡', description: '为你自己或任何玩家创建一个自定义的真心话或大冒险。' },
     [Language.MY]: { name: 'Kad Raja', description: "Cipta cabaran 'Truth or Dare' anda sendiri untuk mana-mana pemain." },
   },
+  [Card.MIRROR]: {
+    image: '/images/cards/MIRROR_CARD.png',
+    [Language.EN]: { name: 'Mirror Card', description: 'Redirect the challenge to another player. They become the new target!' },
+    [Language.CN]: { name: '镜像卡', description: '将挑战转移给另一名玩家，他们成为新目标！' },
+    [Language.MY]: { name: 'Kad Cermin', description: 'Alihkan cabaran kepada pemain lain. Mereka menjadi sasaran baru!' },
+  },
+  [Card.PARTNER]: {
+    image: '/images/cards/PARTNER_CARD.png',
+    [Language.EN]: { name: 'Partner Card', description: 'Drag another player into the challenge. You must BOTH complete it!' },
+    [Language.CN]: { name: '伙伴卡', description: '拖另一名玩家一起完成挑战。你们必须一起成功！' },
+    [Language.MY]: { name: 'Kad Rakan', description: 'Tarik pemain lain ke dalam cabaran. Anda BERDUA mesti selesaikannya!' },
+  },
 };

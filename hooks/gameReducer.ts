@@ -1,4 +1,16 @@
-import { GameState, GameScreen, Player, Language, GameAction, ChallengeType, Card, Difficulty } from '../types';
+import { GameState, GameScreen, Language, GameAction, ChallengeType, Card, Difficulty, ExecutionMode } from '../types';
+
+// Helper to create a clean/empty challenge state
+const createEmptyChallenge = (): GameState['currentChallenge'] => ({
+  type: null,
+  text: '',
+  originalExecutorIndex: null,
+  currentExecutorIndex: null,
+  partnerIndex: null,
+  executionMode: ExecutionMode.SOLO,
+  executorCompleted: false,
+  partnerCompleted: false,
+});
 
 export const initialState: GameState = {
   players: [],
@@ -6,12 +18,9 @@ export const initialState: GameState = {
   currentScreen: GameScreen.SETUP,
   currentPlayerIndex: null,
   previousPlayerIndex: null,
-  currentChallenge: {
-    type: null,
-    text: '',
-  },
+  currentChallenge: createEmptyChallenge(),
   isLoading: false,
-  language: Language.EN,
+  language: Language.CN,
   isForcedDare: false,
   isPickingPlayer: false,
   isCardModalOpen: false,
@@ -19,6 +28,9 @@ export const initialState: GameState = {
   isStealFailure: false,
   battle: null,
   lastCardAwarded: null,
+  // Mirror & Partner UI State
+  isSelectingMirrorTarget: false,
+  isSelectingPartnerTarget: false,
 };
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -60,7 +72,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         currentScreen: GameScreen.GAME,
         isPickingPlayer: true,
         currentPlayerIndex: null,
-        currentChallenge: { type: null, text: '' },
+        currentChallenge: createEmptyChallenge(),
       };
     case 'START_PLAYER_PICKING': {
       const lastPlayerIndex = state.currentPlayerIndex;
@@ -72,8 +84,9 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
           Card.BATTLE, Card.BATTLE, Card.BATTLE,        // Uncommon (30%)
           Card.STEAL, Card.STEAL,                       // Uncommon (20%)
           Card.IMMUNITY,                                // Rare (10%)
-          Card.KING                                     // Rarest (10%)
-          // 总数 7 张卡，控制概率通过重复次数
+          Card.KING,                                    // Rarest (10%)
+          Card.MIRROR, Card.MIRROR,                     // New: Mirror card (20%)
+          Card.PARTNER,                                 // New: Partner card (10%)
         ];
         const randomCard = droppableCards[Math.floor(Math.random() * droppableCards.length)];
 
@@ -93,7 +106,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         return {
           ...state,
           players: updatedPlayers,
-          currentChallenge: { type: null, text: '' },
+          currentChallenge: createEmptyChallenge(),
           gameMessage: null,
           lastCardAwarded,
           isPickingPlayer: false, // Explicitly set to false
@@ -104,7 +117,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         isPickingPlayer: true,
-        currentChallenge: { type: null, text: '' },
+        currentChallenge: createEmptyChallenge(),
         gameMessage: null,
       };
     }
@@ -125,7 +138,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         previousPlayerIndex: state.currentPlayerIndex,
         currentPlayerIndex: newPlayerIndex,
-        currentChallenge: { type: null, text: '' },
+        currentChallenge: createEmptyChallenge(),
         isForcedDare: players[newPlayerIndex].consecutiveTurns >= 2,
         players,
         gameMessage: null, // Clear previous messages
@@ -135,7 +148,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         isLoading: true,
-        currentChallenge: { type: action.payload, text: '' },
+        currentChallenge: {
+          ...createEmptyChallenge(),
+          type: action.payload,
+          originalExecutorIndex: state.currentPlayerIndex,
+          currentExecutorIndex: state.currentPlayerIndex,
+        },
       };
     case 'RECEIVE_CHALLENGE': {
       if (state.currentPlayerIndex === null) {
@@ -184,7 +202,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         isLoading: false,
         isStealFailure: false,
-        currentChallenge: { ...action.payload },
+        currentChallenge: {
+          ...state.currentChallenge,
+          type: action.payload.type,
+          text: action.payload.text,
+        },
         players: updatedPlayers,
         gameMessage,
       };
@@ -225,8 +247,24 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
             players: updatedPlayers,
             isPickingPlayer: true,
             currentPlayerIndex: null, // Picker animation will select next player
-            currentChallenge: { type: null, text: '' },
+            currentChallenge: createEmptyChallenge(),
             gameMessage: { key: 'immunityUsed' },
+          };
+        }
+        case Card.MIRROR: {
+          // Open target selection for Mirror (don't consume card yet)
+          return {
+            ...state,
+            isCardModalOpen: false,
+            isSelectingMirrorTarget: true,
+          };
+        }
+        case Card.PARTNER: {
+          // Open target selection for Partner (don't consume card yet)
+          return {
+            ...state,
+            isCardModalOpen: false,
+            isSelectingPartnerTarget: true,
           };
         }
         default:
@@ -262,8 +300,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         players: updatedPlayers,
         currentPlayerIndex: targetPlayerIndex,
         currentChallenge: {
+          ...createEmptyChallenge(),
           type: action.payload.challengeType,
           text: action.payload.challengeText,
+          originalExecutorIndex: kingPlayerIndex,
+          currentExecutorIndex: targetPlayerIndex,
         },
         gameMessage: { key: 'kingUsed', options: { kingName: kingPlayer.name, targetName: targetPlayer.name } },
         isCardModalOpen: false,
@@ -301,7 +342,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         battle: null,
         currentPlayerIndex: loserIndex,
-        currentChallenge: { type: null, text: '' },
+        currentChallenge: createEmptyChallenge(),
         isForcedDare: true, // Force a dare for the loser
         gameMessage: { key: 'battleLoser', options: { name: state.players[loserIndex].name } },
       }
@@ -371,6 +412,121 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       }
     case 'SET_GAME_MESSAGE':
       return { ...state, gameMessage: action.payload };
+
+    // ==================== MIRROR CARD ACTIONS ====================
+    case 'OPEN_MIRROR_TARGET_SELECT':
+      return { ...state, isSelectingMirrorTarget: true, isCardModalOpen: false };
+
+    case 'CLOSE_MIRROR_TARGET_SELECT':
+      return { ...state, isSelectingMirrorTarget: false };
+
+    case 'APPLY_MIRROR_EFFECT': {
+      if (state.currentPlayerIndex === null) return state;
+
+      const mirrorUserIndex = state.currentPlayerIndex;
+      const mirrorUser = state.players[mirrorUserIndex];
+      const targetIndex = state.players.findIndex(p => p.id === action.payload.targetId);
+
+      if (targetIndex === -1) return state;
+
+      // Validation: Cannot use Mirror in 1v1 (need at least 2 other players)
+      if (state.players.length <= 2) {
+        return {
+          ...state,
+          isSelectingMirrorTarget: false,
+          gameMessage: { key: 'mirrorFail1v1' },
+        };
+      }
+
+      // Find and consume the Mirror card
+      const mirrorCardIndex = mirrorUser.cards.indexOf(Card.MIRROR);
+      if (mirrorCardIndex === -1) return state;
+
+      const updatedCards = [...mirrorUser.cards];
+      updatedCards.splice(mirrorCardIndex, 1);
+
+      const updatedPlayers = [...state.players];
+      updatedPlayers[mirrorUserIndex] = { ...mirrorUser, cards: updatedCards };
+
+      const targetPlayer = state.players[targetIndex];
+
+      return {
+        ...state,
+        players: updatedPlayers,
+        currentPlayerIndex: targetIndex, // Switch focus to new target
+        currentChallenge: {
+          ...state.currentChallenge,
+          currentExecutorIndex: targetIndex,
+        },
+        isSelectingMirrorTarget: false,
+        gameMessage: {
+          key: 'mirrorUsed',
+          options: {
+            fromName: mirrorUser.name,
+            toName: targetPlayer.name
+          }
+        },
+      };
+    }
+
+    // ==================== PARTNER CARD ACTIONS ====================
+    case 'OPEN_PARTNER_TARGET_SELECT':
+      return { ...state, isSelectingPartnerTarget: true, isCardModalOpen: false };
+
+    case 'CLOSE_PARTNER_TARGET_SELECT':
+      return { ...state, isSelectingPartnerTarget: false };
+
+    case 'APPLY_PARTNER_EFFECT': {
+      if (state.currentPlayerIndex === null) return state;
+
+      const partnerUserIndex = state.currentPlayerIndex;
+      const partnerUser = state.players[partnerUserIndex];
+      const targetIndex = state.players.findIndex(p => p.id === action.payload.targetId);
+
+      if (targetIndex === -1) return state;
+
+      // Find and consume the Partner card
+      const partnerCardIndex = partnerUser.cards.indexOf(Card.PARTNER);
+      if (partnerCardIndex === -1) return state;
+
+      const updatedCards = [...partnerUser.cards];
+      updatedCards.splice(partnerCardIndex, 1);
+
+      const updatedPlayers = [...state.players];
+      updatedPlayers[partnerUserIndex] = { ...partnerUser, cards: updatedCards };
+
+      const targetPlayer = state.players[targetIndex];
+
+      return {
+        ...state,
+        players: updatedPlayers,
+        currentChallenge: {
+          ...state.currentChallenge,
+          partnerIndex: targetIndex,
+          executionMode: ExecutionMode.SHARED,
+        },
+        isSelectingPartnerTarget: false,
+        gameMessage: {
+          key: 'partnerLinked',
+          options: {
+            initiatorName: partnerUser.name,
+            partnerName: targetPlayer.name
+          }
+        },
+      };
+    }
+
+    case 'COMPLETE_PARTNER_TURN': {
+      // Mark the partner's portion as complete (used when partner confirms completion)
+      return {
+        ...state,
+        currentChallenge: {
+          ...state.currentChallenge,
+          partnerCompleted: true,
+        },
+      };
+    }
+
     default:
       return state;
   }

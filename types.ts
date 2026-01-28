@@ -13,13 +13,13 @@ export enum Difficulty {
 }
 
 export enum GameScreen {
-    SETUP = 'setup',
-    GAME = 'game',
+  SETUP = 'setup',
+  GAME = 'game',
 }
 
 export enum ChallengeType {
-    TRUTH = 'truth',
-    DARE = 'dare',
+  TRUTH = 'truth',
+  DARE = 'dare',
 }
 
 export enum Card {
@@ -27,6 +27,13 @@ export enum Card {
   BATTLE = 'BATTLE',         // 对战卡
   STEAL = 'STEAL',           // 偷取卡
   KING = 'KING',             // 国王卡
+  MIRROR = 'MIRROR',         // 镜像卡 (Redirect challenge to another player)
+  PARTNER = 'PARTNER',       // 伙伴卡 (Drag another player into shared execution)
+}
+
+export enum ExecutionMode {
+  SOLO = 'SOLO',
+  SHARED = 'SHARED',
 }
 
 export enum RPS {
@@ -63,6 +70,13 @@ export interface GameState {
   currentChallenge: {
     type: ChallengeType | null;
     text: string;
+    // Mirror & Partner Tracking
+    originalExecutorIndex: number | null;  // Who originally pulled the challenge
+    currentExecutorIndex: number | null;   // Who is currently responsible (modified by Mirror)
+    partnerIndex: number | null;           // Linked partner (modified by Partner)
+    executionMode: ExecutionMode;          // SOLO or SHARED
+    executorCompleted: boolean;
+    partnerCompleted: boolean;
   };
   isLoading: boolean;
   language: Language;
@@ -73,6 +87,9 @@ export interface GameState {
   isStealFailure: boolean;
   battle: BattleState | null;
   lastCardAwarded: { playerName: string; card: Card } | null;
+  // Mirror & Partner UI State
+  isSelectingMirrorTarget: boolean;
+  isSelectingPartnerTarget: boolean;
 }
 
 export type GameAction =
@@ -100,12 +117,20 @@ export type GameAction =
   | { type: 'START_BATTLE'; payload: { opponentId: string } }
   | { type: 'END_BATTLE'; payload: { loserId: string } }
   | { type: 'ATTEMPT_STEAL'; payload: { targetId: string } }
-  | { type: 'CLEAR_CARD_AWARD' };
+  | { type: 'CLEAR_CARD_AWARD' }
+  // Mirror & Partner Actions
+  | { type: 'OPEN_MIRROR_TARGET_SELECT' }
+  | { type: 'CLOSE_MIRROR_TARGET_SELECT' }
+  | { type: 'APPLY_MIRROR_EFFECT'; payload: { targetId: string } }
+  | { type: 'OPEN_PARTNER_TARGET_SELECT' }
+  | { type: 'CLOSE_PARTNER_TARGET_SELECT' }
+  | { type: 'APPLY_PARTNER_EFFECT'; payload: { targetId: string } }
+  | { type: 'COMPLETE_PARTNER_TURN' };
 
 export interface LocalizationContextType {
-    language: Language;
-    setLanguage: (language: Language) => void;
-    t: (key: string, options?: Record<string, string | number>) => string;
+  language: Language;
+  setLanguage: (language: Language) => void;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 export interface AppContextType {

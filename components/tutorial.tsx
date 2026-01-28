@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLocalization } from '../context/LocalizationContext';
 import { CARD_DETAILS } from '../constants';
-import { Card } from '../types';
 
 interface TutorialProps {
   onClose: () => void;
@@ -20,28 +19,23 @@ const Tutorial: React.FC<TutorialProps> = ({ onClose }) => {
     {
       title: t('tutWelcomeTitle'),
       content: t('tutWelcomeText'),
-      icon: "🌐"
     },
     {
       title: t('tutRouletteTitle'),
       content: t('tutRouletteText'),
-      icon: "🎡"
     },
     {
       title: t('tutChoiceTitle'),
       content: t('tutChoiceText'),
-      icon: "🎭"
     },
     {
       title: t('tutCardsTitle'),
       content: t('tutCardsText'),
-      icon: "🃏",
       showCards: true
     },
     {
       title: t('tutReadyTitle'),
       content: t('tutReadyText'),
-      icon: "✨"
     }
   ];
 
@@ -75,7 +69,6 @@ const Tutorial: React.FC<TutorialProps> = ({ onClose }) => {
         </div>
 
         <div className="text-center space-y-4">
-          <div className="text-7xl mb-4 animate-float">{currentStep.icon}</div>
           <h2 className="text-3xl font-black text-gray-800 uppercase tracking-tighter">
             {currentStep.title}
           </h2>
@@ -84,26 +77,26 @@ const Tutorial: React.FC<TutorialProps> = ({ onClose }) => {
           </p>
 
           {currentStep.showCards && (
-            <div className="grid grid-cols-2 gap-4 pt-6 px-2">
+            <div className="grid grid-cols-3 gap-3 pt-6 px-1">
               {Object.entries(CARD_DETAILS).map(([key, details]) => {
                 const isFlipped = flippedCards[key];
                 const cardLoc = details[language] || details['en'];
 
                 return (
-                  <div key={key} className="flex flex-col items-center gap-2">
+                  <div key={key} className="flex flex-col items-center gap-1">
                     <div
                       className="w-full aspect-[2/3] perspective-1000 cursor-pointer"
                       onClick={() => toggleFlip(key)}
                     >
                       <div className={`relative w-full h-full transition-transform-600 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
                         {/* Front */}
-                        <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden shadow-md border-2 border-gray-100">
+                        <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden shadow-sm border-[1px] border-gray-100">
                           <img src={details.image} alt={key} className="w-full h-full object-cover" />
                         </div>
                         {/* Back */}
-                        <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gray-800 rounded-xl flex flex-col items-center justify-center p-4 text-white shadow-xl border-2 border-[#FAB655]">
-                          <span className="text-xs font-black uppercase text-[#FAB655] mb-2">{cardLoc.name}</span>
-                          <p className="text-[10px] font-bold leading-tight">{cardLoc.description}</p>
+                        <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gray-800 rounded-xl flex flex-col items-center justify-center p-2 text-white shadow-xl border-2 border-[#FAB655]">
+                          <span className="text-[8px] font-black uppercase text-[#FAB655] mb-1">{cardLoc.name}</span>
+                          <p className="text-[7px] font-bold leading-tight">{cardLoc.description}</p>
                         </div>
                       </div>
                     </div>
