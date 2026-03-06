@@ -9,9 +9,9 @@ const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useLocalization();
 
   const languages = [
-    // { code: Language.EN, label: "EN" }, 
+    { code: Language.EN, label: "EN" },
     { code: Language.CN, label: "CN" },
-    // { code: Language.MY, label: "MY" },  
+    { code: Language.MY, label: "MY" },
   ];
   return (
     <div className="flex bg-white/50 p-1.5 rounded-2xl border-2 border-gray-100 backdrop-blur-sm">
